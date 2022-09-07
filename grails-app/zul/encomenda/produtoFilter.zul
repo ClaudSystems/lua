@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window id="win" apply="encomenda.ProdutoFilterComposer"  closable="true">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+
+        <vbox id="scaffoldingBox"/>
+
+        Filtragem:
+        <textbox id="tb_filter" instant="true"/>
+        <button id="bt_close_win" label="Cancelar" autodisable="ok,cancel"
+                style="background:gry;color:black"/>
+        <hbox>
+            <div width="60%" height="">
+                <listbox autopaging="true" id="lb_produtos"  >
+                    <listhead sizable="true">
+                        <listheader label="Codigo" width="100px" sort="auto"/>
+                        <listheader label="Descricao" sort="auto"/>
+                    </listhead>
+
+                    <listfoot>
+                        <listfooter>
+
+                        </listfooter>
+                        <listfooter>
+
+                        </listfooter>
+                    </listfoot>
+                </listbox>
+            </div>
+            <div width="">
+
+
+            </div>
+        </hbox>
+
+
+    </window>
+
+</zk>

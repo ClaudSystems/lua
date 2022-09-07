@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('fornecedorCrudViewModel')">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+
+        <label id="info"/>
+
+        <button  visible="@bind(!not empty vm.selectedFornecedor)"   image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addFornecedor')" id="bt_add"  label="Novo Fornecedor"  />
+
+
+        <grid width="50%" style="margin-top:20px" visible="@bind(not empty vm.selectedFornecedor)" >
+            <columns>
+                <column   image="${z.resource(dir:'images', file:'fornecedor.png')}" label="" width="20%" />
+                <column label="@bind(vm.selectedFornecedor.nome)" width="30%" />
+
+            </columns >
+            <rows id="rows">
+                <row>
+                    <label value="Codigo"/>
+                    <textbox constraint="no empty" value="@bind(vm.selectedFornecedor.codigo)" validationMessages="@validator('codigoValidator')"  width="100%" />
+                </row>
+                <row>
+                    <label value="Nome"/>
+                    <textbox constraint="no empty" value="@bind(vm.selectedFornecedor.nome)"   width="100%" />
+                </row>
+                <row>
+                    <label value="Nuit"/>
+                    <intbox constraint="no empty" value="@bind(vm.selectedFornecedor.nuit)" width="100%"  />
+                </row>
+                <row>
+                    <label value="Nº Telefone"/>
+                    <intbox constraint="no negative" value="@bind(vm.selectedFornecedor.numTelefone)" width="100%"/>
+                </row>
+                <row>
+                    <label value="Email"/>
+                    <textbox  constraint="/.+@.+\.[a-z]+/: Insira um endereço de email válido!"  value="@bind(vm.selectedFornecedor.mail)" width="100%" />
+                </row>
+                <row>
+                    <label value="Endereço"/>
+                    <textbox value="@bind(vm.selectedFornecedor.endereco)" width="100%" />
+                </row>
+
+
+                <row>
+                    <cell colspan="2" style="text-align:center">
+                        <hlayout>
+
+                            <div visible="@load(vm.btsalvar)" > <button image="${z.resource(dir:'images', file:'save.png')}"  style="color:white;background:blue"   onClick="@command('salvarFornecedor')" label="Salvar"  /></div>
+                            <div visible="@load(!vm.btsalvar)" ><button image="${z.resource(dir:'images', file:'update.png')}" style="color:white;background:#0000A0"   onClick="@command('updateFornecedor')" label="Actualizar"  />
+                            <button  image="${z.resource(dir:'images', file:'remover.png')}"   style="color:white;background:#800000"   onClick="@command('deleteFornecedor')" label="Remover" />
+                            </div>
+                            <button  image="${z.resource(dir:'images', file:'cancelar.png')}" label="Cancelar" onClick="@command('fecharEditor')" />
+                        </hlayout>
+                    </cell>
+                </row>
+            </rows>
+
+        </grid>
+
+        Filtragem:
+        <textbox width="44%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+
+        <div width="100%">
+            <listbox multiple="true" checkmark="true"   style="@bind('style')"    selectedItem="@bind(vm.selectedFornecedor)"  model="@load(vm.fornecedores)" width="100%"
+                     height="" mold="paging" pageSize="10" >
+                <listhead >
+                    <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+                    <listheader  width="90px" label="Item" align="left"/>
+                    <listheader  width="100px" label="Codigo" align="left"/>
+                    <listheader width="300px" label="Nome" align="left"/>
+                    <listheader width="100px" label="Nuit" align="left"/>
+                    <listheader width="200px" label="E-mail" align="left"/>
+                    <listheader width="100px" label="No. Tef." align="left"/>
+                    <listheader width="" label="Endereço" align="left"/>
+                </listhead>
+                <template name="model" status="s">
+
+                    <listitem style="@bind('style')" onDoubleClick="@command('addSelectedtItem')" onClick="@command('removeBtSalvar')">
+                        <listcell label="@bind(s.index)"/>
+                        <listcell  label="@load(each.codigo)"  />
+                        <listcell  label="@load(each.nome)"    />
+                        <listcell  label="@load(each.nuit)"   />
+                        <listcell  label="@load(each.mail)"   />
+                        <listcell  label="@load(each.numTelefone)"   />
+                        <listcell  label="@load(each.endereco)"   />
+                        <listcell>
+
+                        </listcell>
+
+                    </listitem>
+                </template>
+
+            </listbox>
+        </div>
+
+
+
+    </window>
+
+</zk>

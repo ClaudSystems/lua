@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window id="win" apply="grailsBindComposer"
+        viewModel="@id('vm') @init('produtoCrudViewModel')">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            .container { border: 1px solid #ccc;border-width: 0 1px;width:451px;}
+            .photo {
+            border: 3px dashed #e6e6e6;
+            border-radius: 10px;
+            width: 123px;
+            height: 123px;
+            position: absolute;
+            overflow: hidden;
+            }
+
+            .content .personDetails  {
+            padding-left: 133px;
+            }
+
+            .content .personDetails .z-label {
+            line-height: 1.42em;
+            }
+
+            .z-dropupload {
+            position: absolute !important;
+            background-color: #f2f2f2;
+            padding: 3px;
+            }
+
+            .z-column {
+            color : black;
+            }
+            .z-dropupload > div{
+            top: 50%;
+            margin-top: -1em;
+            height: 2em;
+            position: absolute;
+            text-align: center;
+            color: #cccccc;
+            }
+
+            .attachments > .z-groupbox-header,
+            .attachments > .z-groupbox-content {
+            border-color: #e6e6e6;
+            }
+            .attachments .z-groupbox-title-content {
+            color: #4d4d4d;
+            }
+
+            .attachments .z-dropupload > div {
+            width: 180px;
+            padding: 0 330px;
+            }
+
+            .dropzone {
+            min-height: 50px;
+            }
+            .attachment {
+            display: inline-block;
+            padding: 4px 7px;
+            margin-bottom: 3px;
+            background-color: #f0f0f8;
+            border-radius: 4px;
+            }
+            .attachment > a {
+            text-decoration: none;
+            }
+            .attachment > a > i {
+            margin-right: 8px;
+            }
+        </style>
+
+
+        <label id="info"/>
+        <label visible="@load(not empty vm.iva)" style="color:red" id="Introduza o iva no sistema!"/>
+        <hbox>
+            <button  visible="@bind(!not empty vm.selectedItem)"  image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addItem')"   label="Add" />
+
+            <grid width="600px" style="margin-top:20px" visible="@bind(not empty vm.selectedItem)" >
+                            <columns style="color:white" >
+                                <column  image="/images/produto.png" label="" width="20%" />
+                                <column label="@bind(vm.selectedItem.nome)" width="" />
+
+
+                            </columns >
+                            <rows id="rows">
+                                <row>
+                                    <label value="Codigo"/>
+                                    <textbox  constraint="no empty" value="@bind(vm.selectedItem.codigo)" validationMessages="@validator('codigoValidator')"  width="100%" />
+                                </row>
+                                <row>
+                                    <label value="Nome"/>
+                                    <textbox onChange="@command('addNomeToDescricao')" constraint="no empty" value="@bind(vm.selectedItem.nome)"   width="100%" />
+                                </row>
+                                <row>
+                                    <label value="Descrição"/>
+                                    <textbox constraint="no empty" value="@bind(vm.selectedItem.descricao)" width="100%"  />
+                                </row>
+
+                                <row>
+                                    <label value="Preço De Venda"/>
+                                    <decimalbox  constraint="no negative" format="###,##0.00"  value="@bind(vm.selectedItem.precoDeVenda) " width="100%"  />
+                                </row>
+                                <row>
+                                    <label value="IVA Incluído"/>
+                                    <button label="@bind(vm.ivaIncluido)" id="bt_iva" onClick="@command('incluirIva')"/>
+                                </row>
+                                <row>
+                                    <label value="Aplicar IVA"/>
+                                    <cell>
+
+                                        <button label="@bind(vm.ivaAplicado)" id="bt_iva_aplicado" onClick="@command('aplicarIva')"/>
+                                        <label value=" de :"/>
+                                        <label value="@load(vm.iva.percentualIva)"/>
+                                        <label value="%"/>
+                                    </cell>
+                                </row>
+                                <row>
+                                    <label value="Estocavel"/>
+                                    <button label="@bind(vm.estocavel)" id="bt_estocavel" onClick="@command('estocavel')"/>
+                                </row>
+                                <row>
+                                   <cell   colspan="2">
+
+                                    <label width="" value="É Pacote"/>
+                                    <button label="@bind(vm.selectedItem.pacote)" id="bt_pacote" onClick="@command('aplicarPacote')"/>
+                                       <intbox visible="@load(vm.pacote)" value="@bind(vm.selectedItem.qtdItems)"/>
+                                   </cell>
+                                </row>
+                                <row>
+                                    <cell colspan="2" style="text-align:center">
+
+
+                                    </cell>
+
+                                </row>
+                                <row>
+                                    <cell colspan="2" style="text-align:center">
+
+                                        <hlayout>
+
+                                            <div visible="@load(vm.btsalvar)" >
+
+                                                <button image="${z.resource(dir:'images', file:'save.png')}" label="Salvar"     onClick="@command('salvarItem')"  />
+                                            </div>
+                                            <div visible="@load(!vm.btsalvar)">
+                                                <button id="bt_update" image="${z.resource(dir:'images', file:'update.png')}" style="color:white"   onClick="@command('updateItem')" label=""/>
+                                                <button id="bt_eliminar" image="${z.resource(dir:'images', file:'remover.png')}"   onClick="@command('showAlert')"  onDoubleClick="@command('deleteItem')"   />
+                                            </div>
+                                            <button  image="${z.resource(dir:'images', file:'cancelar.png')}" label="Cancelar" onClick="@command('fecharEditor')" />
+
+                                        </hlayout>
+                                    </cell>
+                                </row>
+                                <row>
+
+                                </row>
+
+                            </rows>
+
+                        </grid>
+
+
+
+    <hbox visible="@bind(!not empty vm.selectedItem)">
+        Filtragem:
+        <textbox  width="100%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+        Codigo:
+        <textbox width="100%"  style="background:#95B9C7;color:black" value="@bind(vm.codigo)" onChange="@command('viewItemByCodigo')" instant="true"/>
+    </hbox>
+        </hbox>
+        <div width="100%">
+            <listbox    style="@bind('style')"    selectedItem="@bind(vm.selectedItem)"  model="@load(vm.items)" width="100%"
+                     height="" mold="paging" pageSize="10" >
+                <listhead >
+                    <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+                    <listheader  width="90px" label="Item" align="left"/>
+                    <listheader sort="auto(codigo)"  width="100px" label="Codigo" align="left"/>
+                    <listheader sort="auto(nome)" width="200px" label="Nome" align="left"/>
+                    <listheader sort="auto(descricao)" width="" label="Descrição" align="left"/>
+                    <listheader sort="auto(saldo)" width="80px" label="SALDO" align="left"/>
+                    <listheader sort="auto(pacote)" width="80px" label="É Pacote" align="left"/>
+                    <listheader sort="auto(qtd)" width="80px" label="QTD" align="left"/>
+                    <listheader sort="auto(saldo)" width="80px" label="Estocável" align="left"/>
+                    <listheader sort="auto(precoDeVenda)" width="160px" label="P. de Venda" align="left"/>
+                    <listheader sort="auto(valorDoIva)" width="160px" label="IVA" align="left"/>
+                    <listheader sort="auto(precoTotalDeVenda)" width="160px" label="V. Liquido" align="left"/>
+
+                </listhead>
+                <template name="model" var="item" status="s">
+
+                    <listitem style="@bind('style')" onDoubleClick="@command('')" onClick="@command('viewItems', id=item.id)">
+                        <listcell label="@bind(s.index)"/>
+                        <listcell  label="@load(item.codigo)"  />
+                        <listcell  label="@load(item.nome)"  />
+                        <listcell  label="@load(item.descricao)"   />
+                        <listcell  label="@load(item.saldo)"  />
+                        <listcell  label="@load(item.pacote)"  />
+                        <listcell  label="@load(item.qtdItems)"  />
+                        <listcell  label="@load(item.estocavel)"  />
+                        <listcell label="@load(item.precoDeVenda)@converter('formatedNumber', format='###,##0.00')" />
+                        <listcell label="@load(item.valorDoIva)@converter('formatedNumber', format='###,##0.00')" />
+                        <listcell label="@load(item.precoTotalDeVenda)  @converter('formatedNumber', format='###,##0.00') " />
+                    </listitem>
+                </template>
+
+            </listbox>
+        </div>
+
+
+    </window>
+
+</zk>

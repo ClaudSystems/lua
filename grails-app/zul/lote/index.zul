@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.zkoss.org/2005/zul"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    <script type="text/javascript"><![CDATA[
+        zk.afterLoad("zul.inp", function () {
+                zul.inp.InputWidget.onChangingDelay=1000;
+        });
+    ]]></script>
+
+    <window apply="lote.IndexComposer" style="background-color: #EBEBEB;">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+
+        <vbox id="scaffoldingBox"/>
+        <label id="lb_info" style="color:green"/>
+        <button id="bt_add_lote" label="Add Lote" style="background:blue;color:white"/>
+
+        <div id="dv_filter" visible="false">
+            <!-- <in clude  src="filter.zul" />-->
+        </div>
+        <hbox>
+            <div width="700px">
+                <grid width="" visible="false" id="gd_lote">
+
+
+                    <columns>
+                        <column label="Designacao" width="30%"/>
+                        <column label="Conteudo" width="45%"/>
+
+
+                    </columns>
+                    <rows id="rows">
+
+                        <row>
+                            <label value="Produto"/>
+                            <combobox constraint="no empty" width="100%" id="cb_produtos" autodrop="true">
+                            </combobox>
+                            <button id="bt_add_produto" label="Novo Produto" autodisable="ok,cancel"
+                                    style="background:gry;color:black"/>
+                        </row>
+                        <row>
+                            <label value="Modelo"/>
+                            <combobox  width="100%" id="cb_modelos" autodrop="true">
+                            </combobox>
+                            <button id="bt_add_modelo" label="Novo Modelo" autodisable="ok,cancel"
+                                    style="background:gry;color:black"/>
+                        </row>
+                        <row>
+                            <label value="Unidade"/>
+                            <combobox width="100%" id="cb_unidades" autodrop="true">
+                            </combobox>
+                            <button id="bt_add_unidade" label="Nova Unidade" autodisable="ok,cancel"
+                                    style="background:gry;color:black"/>
+                        </row>
+
+                        <row>
+                            <label value="Validade"/>
+                            <datebox constraint="no empty" id="db_validade" width="100%"/>
+                        </row>
+
+                        <row>
+                            <label value="Codigo"/>
+                            <textbox constraint="no empty" id="tb_codigo_lote" width="100%"/>
+                        </row>
+                        <row>
+                            <cell colspan="2" style="text-align:center">
+                                <hlayout>
+
+                                    <div id="dv_salvar">
+                                        <button style="color:white;background:green" id="bt_salvar_lote" label="Salvar"
+                                                width="100px" height="30px"/>
+                                    </div>
+                                    <button style="color:white;background:#0000A0" id="bt_update" label="Actualizar"
+                                            width="100px" height="30px"/>
+                                    <div id="dv_delite">
+                                        <button style="color:white;background:#800000" id="bt_delite" label="Eliminar"
+                                                width="100px" height="30px"/>
+                                    </div>
+
+                                </hlayout>
+                            </cell>
+                        </row>
+                    </rows>
+
+                </grid>
+            </div>
+            <div id="dv_direito" width="600px">
+                <label visible="false" id="lb_info_add" style="font-size:14pt" value="Novo Produto"/>
+                <grid width="" visible="false" id="gd_produto">
+
+
+                    <columns>
+                        <column label="Designacao" width="30%"/>
+                        <column label="Conteudo" width=""/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Codigo"/>
+                            <textbox constraint="no empty" id="tb_codigo_produto" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="Nome"/>
+                            <textbox id="tb_nome_produto" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="Descricao"/>
+                            <textbox  constraint="no empty" id="tb_descricao_produto" width="100%"/>
+                        </row>
+
+
+                        <row>
+                            <cell colspan="2" style="text-align:center">
+                                <hlayout>
+
+                                    <div id="dv_salvar_produto">
+                                        <button style="color:white;background:green" id="bt_salvar_produto"
+                                                label="Salvar" width="100px" height="30px"/>
+                                    </div>
+                                </hlayout>
+                            </cell>
+                        </row>
+                    </rows>
+
+                </grid>
+
+                <grid width="" visible="false" id="gd_modelo">
+
+                    <columns>
+                        <column label="Designacao" width="40%"/>
+                        <column label="Conteudo" width=""/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Marca"/>
+                            <combobox width="100%" id="cb_marcas_modelo"
+                                      autodrop="true" autocomplete="true" fulfill="onOpen">
+
+                            </combobox>
+                        </row>
+                        <row>
+                            <label value="Descrição"/>
+                            <textbox constraint="no empty" id="tb_descricao_modelo" width="100%"/>
+                        </row>
+
+
+                        <row>
+                            <cell colspan="2" style="text-align:center">
+                                <hlayout>
+
+                                    <div id="dv_salvar_modelo">
+                                        <button style="color:white;background:green" id="bt_salvar_modelo"
+                                                label="Salvar" width="100px" height="30px"/>
+                                        <button style="color:black;background:gry" id="bt_add_marca"
+                                                label="Nova Marca" width="100px" height="30px"/>
+                                    </div>
+                                </hlayout>
+                            </cell>
+                        </row>
+
+                    </rows>
+
+                </grid>
+                <grid width="" visible="false" id="gd_marca">
+
+                    <columns>
+                        <column label="Designacao" width="40%"/>
+                        <column label="Conteudo" width=""/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Nome"/>
+                            <textbox  value="" constraint="no empty" id="tb_nome_marca" width="100%"/>
+                        </row>
+
+                        <row>
+                            <cell colspan="2" style="text-align:center">
+                                <hlayout>
+
+                                    <div id="dv_salvar_marca">
+                                        <button style="color:white;background:green" id="bt_salvar_marca" label="Salvar"
+                                                width="100px" height="30px"/>
+                                    </div>
+                                </hlayout>
+                            </cell>
+                        </row>
+                    </rows>
+
+                </grid>
+                <grid width="" visible="false" id="gd_unidade">
+
+
+                    <columns>
+                        <column label="Designacao" width="30%"/>
+                        <column label="Conteudo" width=""/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Codigo"/>
+                            <textbox constraint="no empty" id="tb_codigo_unidade" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="Nome"/>
+                            <textbox constraint="no empty" id="tb_nome_unidade" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="No. de elementos da U."/>
+                            <intbox id="ib_qtd_unidade" width="100%"/>
+                        </row>
+
+
+                        <row>
+                            <cell colspan="2" style="text-align:center">
+                                <hlayout>
+
+                                    <div id="dv_salvar_unidade">
+                                        <button style="color:white;background:green" id="bt_salvar_unidade"
+                                                label="Salvar" width="100px" height="30px"/>
+                                    </div>
+                                </hlayout>
+                            </cell>
+                        </row>
+                    </rows>
+
+                </grid>
+            </div>
+        </hbox>
+        <textbox  id="tb_filtro_codigo"/>
+         <listbox autopaging="true" id="lb_lotes">
+            <listhead sizable="true">
+                <listheader label="Codigo" sort="auto"/>
+                <listheader label="Produto" sort="auto"/>
+                <listheader label="Modelo" sort="auto"/>
+                <listheader label="Unidade" sort="auto"/>
+                <listheader label="Validade" sort="auto"/>
+            </listhead>
+            <listitem>
+
+            </listitem>
+            <listfoot>
+                <listfooter>
+
+                </listfooter>
+                <listfooter>
+
+                </listfooter>
+            </listfoot>
+        </listbox>
+
+
+    </window>
+
+</zk>

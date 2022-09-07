@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window id="win" mode="modal" apply="entradadeproduto.ShowEntradaDeProdutoComposer">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+
+        <grid id="gb_encomenda" width="800px" >
+
+            <columns sizable="true">
+                <column   label="Entrada de produtos" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}" width="190px"/>
+                <column  label="" width="600px"/>
+
+            </columns>
+
+            <rows>
+
+                <row>
+                    <label value="No."/>
+                    <label style="font-weight:bold" id="lb_id"/>
+                </row>
+
+
+            </rows>
+
+        </grid>
+        <div id="dv_cliente">
+            <grid id="gb_fornecedor" visible="true" width="800px" >
+
+                <columns sizable="true">
+                    <column  id="" label="" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}" width="190px"/>
+                    <column  label="" width="600px"/>
+
+                </columns>
+
+                <rows>
+
+                    <row id="rw_nome">
+                        <label value="Cliente"/>
+                        <label id="lb_nome" width="99%"/>
+                    </row>
+
+                </rows>
+
+            </grid>
+        </div>
+
+        <listbox id="lb_items" width="800px">
+            <listhead sizable="true">
+
+                <listheader width="100px" label="Codigo" sort="auto"/>
+                <listheader width="300px" label="Descrição dos produtos" sort="auto"/>
+                <listheader width="60px" label="Qtd" sort="auto"/>
+                <listheader width="130px" label="Preço Unit." sort="auto"/>
+                <listheader width="200px" label="S. Total" sort="auto"/>
+
+            </listhead>
+
+            <listfoot>
+                <listfooter />
+                <listfooter />
+                <listfooter />
+                <listfooter label="Total" />
+                <listfooter id="lf_total"/>
+
+
+
+            </listfoot>
+
+        </listbox>
+
+        <vbox id="scaffoldingBox"/>
+        <button id="bt_close" label="Close"/>
+
+    </window>
+
+
+
+</zk>

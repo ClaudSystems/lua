@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window id="win" apply="grailsBindComposer"
+        viewModel="@id('vm') @init('cotacaoViewModel')">
+
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+        <vbox width="">
+            <hbox>
+                <hbox>
+                    Cliente: <combobox height="" onSelect="@command('renderSelectedCliente')"  onCreate="@command('renderCb_clientes')" constraint="no empty" width="300px" id="cb_clientes" autodrop="true"/>
+                    <grid width="300px">
+                        <columns>
+                            <column width="40%"/>
+                            <column/>
+                        </columns>
+
+                        <rows>
+                            <row>Nuit:<label value="@bind(vm.selectedCliente.nuit)"/></row>
+                            <row>Mail:<label value="@bind(vm.selectedCliente.mail)"/></row>
+                            <row>Num. Telf.:<label value="@bind(vm.selectedCliente.numTelefone)"/></row>
+                            <row>Endeço:<label value="@bind(vm.selectedCliente.endereco)"/></row>
+
+
+                        </rows>
+                    </grid>
+                </hbox>
+
+            <div>
+                <grid width="300px">
+
+                    <auxhead>
+
+
+                    </auxhead>
+                    <rows sclass="narrow">
+
+                        <row>
+                            <vbox><label value="sub total "/><label  value="iva"/><label value="total"/></vbox>
+                            <vbox   style="font-weight:bold"><label   id="lb_st" value=" @converter('formatedNumber', format='###,##0.00')"/><label id="lb_iva"  value=" @converter('formatedNumber', format='###,##0.00')"/><label id="lb_total" value=" @converter('formatedNumber', format='###,##0.00')"/></vbox>
+                        </row>
+
+                    </rows>
+                </grid>
+            </div>
+
+            </hbox>
+            <div>
+                <listbox id="lb_items"  mold="paging" pageSize="20" context="mp_edit" multiple="true" >
+
+                    <listhead>
+                        <listheader width="15%" sort="auto" label="Codigo" />
+                        <listheader width="60%"  label="Descrição" />
+                        <listheader  width="10%" label="Qtd" />
+                        <listheader width="15%"  label="Valor Unitário" />
+                        <listheader width="15%"  label="Sub Total" />
+                        <!--<listheader width="5%"  label="Select" />-->
+                    </listhead>
+                    <listitem >
+                        <listcell><textbox  id="tb_cod"  onChange="@command('addFirstItem')" width="100%" /></listcell>
+                        <listcell><textbox id="tb_desc" width="100%" /></listcell>
+                        <listcell><intbox onChange="@command('calculateSB')" id="ib_qt" constraint="no negative " width="100%" /></listcell>
+                        <listcell><doublebox onChange="@command('calculateSB')" id="db_vu" width="100%" constraint="no negative ,no zero "  format="#,##0.##" /></listcell>
+                        <listcell><label id="lb_sub_total"/></listcell>
+                    </listitem>
+
+                   <!-- <listfoot >
+                        <listfooter><label value=""/></listfooter>
+                        <listfooter><label value=""/></listfooter>
+                        <listfooter><label value=""/></listfooter>
+                        <listfooter><label value=""/><vbox><label value="sub total"/><label value="iva"/><label value="total"/></vbox></listfooter>
+                        <listfooter><label value=""/><vbox><label id="lb_st" value=""/><label id="lb_iva" value=""/><label id="lb_total" value=""/></vbox></listfooter>
+                    </listfoot>-->
+                </listbox>
+
+                <div id="dv_salvar"> <button  style="color:white;background:green" onClick="@command('saveItemsProduto')"  id="bt_salvar" label="Salvar" width="100px" height="30px" />
+                    <button  onClick="@command('close')" label="Voltar" style="background:gray;color:white"  />
+                    <!-- <button  onClick="@command('reset')" label="Reset"   />-->
+                </div>
+                <menupopup id="mp_edit">
+                    <menuitem id="mi_remover" label="Remover items seleccionados" />
+
+                    <menuitem id="mi_remover_todos" label="Remover Todos" />
+
+                </menupopup>
+            </div>
+
+            <div>
+                Filtragem:
+                <textbox width="80%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+
+                <hbox>
+
+                    <div width="100%">
+                        <listbox id="lb_filter" selectedItem="@bind(vm.pickedItem)"  model="@load(vm.items)" width="100%"
+                                 height="" mold="paging" pageSize="10" >
+                            <listhead>
+                                <listheader label="Codigo" align="left"/>
+                                <listheader width="" label="Nome" align="left"/>
+                                <listheader width="" label="Descrição" align="left"/>
+                                <listheader width="" label="Saldo" align="left"/>
+                            </listhead>
+                            <template name="model" var="item" >
+                                <listitem style="@bind('style')" >
+                                    <listcell  label="@load(item.codigo)"  />
+                                    <listcell  label="@load(item.nome)"    />
+                                    <listcell  label="@load(item.descricao)"   />
+                                    <listcell  label="@load(item.saldo)"  />
+                                </listitem>
+                            </template>
+
+                        </listbox>
+                    </div>
+                    <div width="">
+
+
+                    </div>
+                </hbox>
+            </div>
+        </vbox>
+
+
+    </window>
+
+</zk>

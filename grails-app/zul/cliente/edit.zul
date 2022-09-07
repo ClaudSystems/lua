@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="cliente.EditComposer">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+
+        <div>
+
+            <button label="Add Practice"/>
+
+        </div>
+
+        <separator/>
+
+        <groupbox height="40px">
+
+            <label value="Practice Name"/>
+
+            <space/>
+
+            <space/>
+
+            <textbox id="practicefilter" cols="50"/>
+
+            <button id="gobutton" label="Go"/>
+
+            <space spacing="20px"/>
+
+            <checkbox label="Show only active"/>
+
+            <space spacing="20px"/>
+
+        </groupbox>
+
+        <separator/>
+
+        <listbox id="PracticeList">
+
+            <listhead sizable="true">
+
+                <listheader label="Practice Name" sort="auto"/>
+
+                <listheader label="City" sort="auto"/>
+
+                <listheader label="State" sort="auto"/>
+
+                <listheader label="Zip Code" sort="auto"/>
+
+            </listhead>
+
+        </listbox>
+
+    </window>
+
+</zk>

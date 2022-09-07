@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('listagemDeVdsViewModel')">
+        <button  onClick="@command('selecionarMesa')" image="${z.resource(dir:'images', file:'restaurante_25.png')}" style="color:white;font-size:14pt;background:#000000" label="@bind(vm.selectedMesa.numeroDaMesa)"/>
+        <label id="info"/>
+        <div>
+            ID : <textbox width="10%"  style="background:#95B9C7;color:black" value="@bind(vm.id)" onChange="@command('findItem')" instant="true"/>
+            Filtragem:
+            <textbox width="20%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+            <button  visible="@load(not empty vm.selectedMesa)"  image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addItem')"   label="Add" />
+            <button onClick="@command('sair')" visible="@load(not empty vm.selectedMesa)" image="${z.resource(dir:'images', file:'close_25.png')}" label="Sair"/>
+
+        </div>
+        <hbox>
+
+                <listbox   checkmark="true"   style="@bind('style')" selectedItem="@bind(vm.selectedMesa)"     model="@load(vm.mesas)" width="500px"
+                  height="" mold="paging" pageSize="10" >
+            <listhead sizable="true" >
+                <listheader  sort="auto(numeroDaMesa)" width="" label="Mesa" align="left"/>
+                <listheader sort="auto(estado)" width="" label="Estado" align="left"/>
+                <listheader sort="auto(localizacao.deescricaoDoLocal)" width="" label="Localização" align="left"/>
+
+
+            </listhead>
+            <template name="model" status="s">
+
+                <listitem  onClick="@command('addSelectedMesa', index=each.id)" style="@bind('style')">
+                    <listcell  label="@load(each.numeroDaMesa)"  />
+                    <listcell  label="@load(each.estado)"    />
+                    <listcell  label="@load(each.localizacao.descricaoDoLocal)"   />
+                </listitem>
+            </template>
+
+        </listbox>
+
+        <grid mold="paging" pageSize="10"   width="300px" model="@bind(vm.vds)">
+            <columns sizable="true">
+
+                <column sort="auto(numeroDeVd)" width="100px"  label="VDs " />
+                <column   sort="auto(valorTotal)"  width="100px" label="Valor" />
+                <column sort="auto(pago)" width="100px" label="Pago?" />
+            </columns>
+            <template name="model"  >
+                <row onClick="@command('showVd', id=each.id)">
+                    <label  value="@bind(each.numeroDeVd)" />
+                    <label  value="@bind(each.valorTotal) @converter('formatedNumber', format='###,##0.00')" />
+                    <label  value="@bind(each.pago)" />
+                </row>
+            </template>
+        </grid>
+            <div visible="">
+
+
+
+            </div>
+        </hbox>
+    </window>
+
+</zk>

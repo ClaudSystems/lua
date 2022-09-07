@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+            viewModel="@id('vm') @init('filterViewModel')" closable="true" border="normal" mode="popup">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+
+
+        Filtragem:
+        <textbox value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+        <button id="bt_close" onClick="@command('close')" label="Close" style="background:green;color:white"  />
+        <hbox>
+            <div width="100%">
+                <listbox id="lb_filter" selectedItem="@bind(vm.pickedItem)" onClick="@command('addSelectedtItem')" model="@load(vm.items)" width="100%"
+                         height="" >
+                    <listhead>
+                        <listheader label="Codigo" align="left"/>
+                        <listheader width="" label="Nome" align="left"/>
+
+
+
+                    </listhead>
+                    <template name="model" var="item">
+                        <listitem>
+                            <listcell label="@load(item.codigo)"/>
+                            <listcell  label="@load(item.nome)" id="@load(item.codigo)" onClick="@command('addSelectedtItem')"  />
+
+
+                        </listitem>
+                    </template>
+
+                </listbox>
+            </div>
+            <div width="">
+
+
+            </div>
+        </hbox>
+    </window>
+
+</zk>

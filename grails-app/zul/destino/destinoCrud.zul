@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window closable="true" apply="grailsBindComposer"
+        viewModel="@id('vm') @init('destinoCrudViewModel')">
+
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+
+        <label id="info"/>
+        <button  visible="@bind(!not empty vm.selectedItem)"  image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addItem')"   label="Add" />
+        <grid width="50%" style="margin-top:20px" visible="@bind(not empty vm.selectedItem)" >
+            <columns>
+                <column  image="${z.resource(dir:'images', file:'destino.png')}"  label="" width="20%" />
+                <column label="@bind(vm.selectedItem.nome)" width="30%" />
+
+            </columns >
+            <rows id="rows">
+                <row>
+                    <label value="Codigo"/>
+                    <textbox constraint="no empty" value="@bind(vm.selectedItem.codigo)" validationMessages="@validator('codigoValidator')"  width="100%" />
+                </row>
+                <row>
+                    <label value="Nome"/>
+                    <textbox constraint="no empty" value="@bind(vm.selectedItem.nome)"   width="100%" />
+                </row>
+                <row>
+                    <label value="Descrição"/>
+                    <textbox constraint="no empty" value="@bind(vm.selectedItem.descricao)" width="100%"  />
+                </row>
+
+
+                <row>
+                    <cell colspan="2" style="text-align:center">
+
+                        <hlayout>
+
+                            <div visible="@load(vm.btsalvar)" >
+
+                                <button image="${z.resource(dir:'images', file:'save.png')}" label="Salvar"  style="color:white;background:blue"   onClick="@command('salvarItem')"  />
+                            </div>
+                            <div visible="@load(!vm.btsalvar)">
+                                <button  image="${z.resource(dir:'images', file:'update.png')}" style="color:white;background:#0000A0"   onClick="@command('updateItem')" label="Actualizar"/>
+                            </div>
+                            <button  image="${z.resource(dir:'images', file:'cancelar.png')}" label="Cancelar" onClick="@command('fecharEditor')" />
+
+
+                        </hlayout>
+                    </cell>
+                </row>
+            </rows>
+
+        </grid>
+
+        <button style="color:white;background:#800000"  visible="@bind(not empty vm.pickedItemSet)" image="${z.resource(dir:'images', file:'remover.png')}" label="Excluir Items Selecionados" onClick="@command('deliteSelectedItems')" />
+
+        Filtragem:
+        <textbox width="44%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+        <div width="100%">
+            <listbox  multiple="true" checkmark="true"  style="@bind('style')"     model="@load(vm.items)" width="100%"
+                     height="" mold="paging" pageSize="10" selectedItems="@bind(vm.pickedItemSet)">
+                <listhead >
+                    <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+                    <listheader  width="50px"  onClick="@command('')"  align="left"/>
+                    <listheader  width="100px" label="Codigo" align="left"/>
+                    <listheader width="300px" label="Nome" align="left"/>
+                    <listheader width="" label="Descrição" align="left"/>
+                    <listheader width="100px" label="" align="left"/>
+
+
+                </listhead>
+
+                <template name="model" status="s">
+
+                    <listitem style="@bind('style')" onClick="@command('')"  onDoubleClick="@command('editSelelctedItem', index=s.index)">
+                        <listcell  label="@bind(s.index)" />
+                        <listcell  label="@load(each.codigo)"  />
+                        <listcell  label="@load(each.nome)"    />
+                        <listcell  label="@load(each.descricao)"   />
+                       <!-- <listcell popup="editPopup"  image="${z.resource(dir:'images', file:'delite.png')}"  />-->
+
+                     </listitem>
+                </template>
+
+            </listbox>
+        </div>
+
+
+
+    </window>
+
+</zk>

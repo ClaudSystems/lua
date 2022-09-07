@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('diarioViewModel')">
+
+        <button  visible="@bind(!vm.bt_remover)"  image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addItem')"   label="Add" />
+        <button   visible="@bind(vm.bt_remover)" image="${z.resource(dir:'images', file:'remover.png')}"  style="color:white;background:#800000"   onClick="@command('fecharDiario')" label="Fechar o Diário"  />
+        <button   visible="@bind(!vm.bt_remover)" image="${z.resource(dir:'images', file:'open_diario.png')}"  style="color:white;background:#808000"   onClick="@command('abrirDiario')" label="Abrir o Diário"  />
+        <button onDoubleClick="@command('imprimirDiarioDetalhado')" visible="@bind(not empty vm.selectedItem)" onRightClick="@command('imprimirDiarioDetalhado')" onClick="@command('imprimirDiario')"  image="${z.resource(dir:'images', file:'printer.png')}" label="Imprimir"/>
+        <label style="color:blue" visible="@bind(not empty vm.selectedItem)" value="click o botão direito do mouse para a impressão do diário detalhado"/>
+
+        <label id="info"/>
+        <hbox>
+        <listbox  visible="@load(vm.lb_items)" multiple="true" selectedItem="@bind(vm.selectedItem)"  style="@bind('style')"     model="@load(vm.items)" width="700px"
+                 height="" mold="paging" pageSize="10" >
+            <listhead >
+                <listheader width="100px"  sort="auto(index)" label="Item" />
+                <listheader width="200px"  sort="auto(numeroDoDiario)" label="Número Do Diário" />
+                <listheader width="100px" sort="auto(estado)"  label="Estado" />
+                <listheader width="100px" sort="auto(dateCreated)"  label="Crição" />
+                <listheader width="100px" sort="auto(lastUpdated)" label="Atualização" />
+
+            </listhead>
+            <template name="model" var="item" status="s">
+
+                <listitem onClick="@command('checkEstado')" style="@bind('style'))"  >
+                    <listcell label="@bind(s.index)" />
+                    <listcell style="border:none"  label="@load(item.numeroDoDiario)" />
+                    <listcell style="border:none"  label="@load(item.estado)" />
+                    <listcell style="border:none"  label="@load(item.dateCreated) @converter('formatedDate', format='dd/MM/yyyy')" />
+                    <listcell style="border:none"  label="@load(item.lastUpdated) @converter('formatedDate', format='dd/MM/yyyy')" />
+
+                   <!-- <listcell>
+                        <hbox>
+                            <button    image="${z.resource(dir:'images', file:'remover.png')}" onClick="@command('removeItem', index=s.index)"  />
+                        </hbox>
+                    </listcell>-->
+
+                </listitem>
+            </template>
+            <listfoot>
+                <listfooter>
+                    <label value="" />
+                </listfooter>
+                <listfooter>
+                    <label value="" />
+                </listfooter>
+                <listfooter>
+                    <label value="" />
+                </listfooter>
+                <listfooter>
+                    <label value="" />
+                </listfooter>
+                <listfooter>
+                    <label value="" />
+                </listfooter>
+                <listfooter>
+
+                </listfooter>
+            </listfoot>
+
+        </listbox>
+
+            <div width="100%">
+                <listbox  multiple="true" id="lb_filter"  selectedItem="@bind(vm.pickedItem)"  model="@load(vm.selectedItem.vds)" width="700px"
+                          height=""  mold="paging" pageSize="10" >
+
+                    <listhead  sizable="true">
+
+                        <listheader  width="100px" label="ID" align="left"/>
+                        <listheader width="150px" label="Valor" align="left"/>
+                        <listheader width="100px" label="Data" align="left"/>
+                        <listheader width="100px" label="@load(vm.selectedItem.estado)" align="left"/>
+
+                    </listhead>
+                    <template name="model" var="item">
+
+                        <listitem style="@bind('style')" onDoubleClick="@command('showIt',index=item.id)" >
+                            <listcell  label="@load(item.numeroDeVd)"  />
+                            <listcell   label="@load(item.valor)  @converter('formatedNumber', format='###,##0.00') "    />
+                            <listcell  label="@load(item.dateCreated)@converter('formatedDate', format='dd/MM/yyyy') "   />
+
+                        </listitem>
+                    </template>
+
+                </listbox>
+            </div>
+        </hbox>
+
+    </window>
+
+</zk>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window  id="win" apply="grailsBindComposer"
+        viewModel="@id('vm') @init('posCrudViewModel')" mode="modal" closable="true">
+        <style>
+            .h-inline-block {
+            display: inline-block;
+            _display: inline;
+            }
+        </style>
+
+        <button  image="${z.resource(dir:'images', file:'close16.png')}" id="btnClose" style="color:#7A0000" label="Close" onClick="@command('closeWin')"/>
+
+    <hbox>
+        <div width="300">
+            <listbox id="lb_categorias" checkmark="true"   style="@bind('style')"   selectedItem="@bind(vm.selectedCategoria)"  model="@load(vm.categorias)" width="200px"
+                      height="" mold="paging" pageSize="10" >
+                <listhead sizable="true" ><listheader width=""  align="left"/>
+                </listhead>
+                <template name="model" status="s">
+                    <listitem style="@bind('style')" onDoubleClick="@command('addSelectedtItem')" onClick="@command('')">
+                        <listcell  label="@load(each.nome)"    />
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+
+        <div  width="300px">
+            <button   image="${z.resource(dir:'images', file:'all16.png')}"  style="color:#7A0000"  onClick="@command('getAllProdutos')"   label="All" />
+
+            <listbox  pagingPosition="bottom"  checkmark="true"   style="@bind('style')"  selectedItem="@bind(vm.selectedProduto)"   model="@load(vm.selectedCategoria.produtos)" width=""
+                      height="" mold="paging" pageSize="10" >
+                <listhead sizable="true" >
+
+                    <listheader width=""  align="left"/>
+                </listhead>
+                <template name="model" status="s">
+                    <listitem style="@bind('style')" onDoubleClick="@command('')" onClick="@command('')">
+
+                        <listcell  label="@load(each.nome)"    />
+
+
+                        <listcell>
+                            <div >
+                            </div>
+                        </listcell>
+
+                    </listitem>
+                </template>
+
+            </listbox>
+        </div>
+    </hbox>
+    </window>
+
+</zk>

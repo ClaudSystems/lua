@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('cotacaoCrudViewModel')">
+
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+        <vbox width="">
+      <!--      <hbox>
+
+                Cliente:
+              &lt;!&ndash; <combobox model="@load(vm.cotacao.cliente.nome)" hflex="1"
+                          selectedItem="@bind(vm.selectedCliente)"
+                          mold="rounded" autodrop="true" autocomplete="true">
+                    <template name="model">
+                        <comboitem
+                                label="@load(each.nome)" value="@load(each.id)" />
+                    </template>
+                </combobox>&ndash;&gt;
+
+            </hbox>-->
+            <div>
+              <!--  <listbox model="@load(vm.items)"  mold="paging"  pageSize="20" context="mp_edit" multiple="true" >
+
+                    <listhead>
+                        <listheader width="5%" sort="auto" label="Item" />
+                        <listheader width="15%" sort="auto" label="Codigo" />
+                        <listheader width="60%"  label="Descrição" />
+                        <listheader sort="5%" width="10%" label="Qtd" />
+                        <listheader width="15%"  label="Valor Unitário" />
+                        <listheader width="15%"  label="Sub Total" />
+                        &lt;!&ndash;<listheader width="5%"  label="Select" />&ndash;&gt;
+                    </listhead>
+                    <template name="model" var="item" status="s">
+                        <listitem>
+                            <listcell label="@bind(s.index)"/>
+                            <listcell>
+                               &lt;!&ndash; <combobox hflex="1" buttonVisible="false"   mold="rounded" autodrop="false" autocomplete="true">
+                                    <template name="model">
+                                        <comboitem
+                                                label="Codigo" value="@load(item.produto.codigo)" />
+                                    </template>
+                                </combobox>&ndash;&gt;
+                            </listcell>
+                            <listcell>
+                               &lt;!&ndash; <combobox  hflex="1"
+                                          onChange="@command('addItem')"   autodrop="false" buttonVisible="false"
+                                          mold="rounded"  autocomplete="true">
+                                    <template name="model">
+                                        <comboitem
+                                                label="@load(each.descricao)" value="@load(item.descricao)" />
+                                    </template>
+                                </combobox>&ndash;&gt;
+                            </listcell>
+                            <listcell><intbox value="@bind(item.qtd)" onChange="@command('')" constraint="no negative " width="100%" /></listcell>
+                            <listcell><doublebox value="@bind(item.valorUnitario)" onChange="@command('calcularSubTotal')"  width="100%" constraint="no negative ,no zero "  format="#,##0.##" /></listcell>
+                            <listcell label="@bind(item.subTotal)"><label value="@load(item.qtd*item.valorUnitario) @converter('formatedNumber', format='###,##0.00')"  /> </listcell>
+
+                        </listitem>
+                    </template>
+
+
+                    <listfoot >
+                        <listfooter><label value=""/></listfooter>
+                        <listfooter><label value=""/></listfooter>
+                        <listfooter><label value=""/></listfooter>
+                        <listfooter><label value=""/><vbox><label value="sub total"/><label value="iva"/><label value="total"/></vbox></listfooter>
+                        <listfooter><label value=""/><vbox><label  value=""/><label  value=""/><label  value=""/></vbox></listfooter>
+                    </listfoot>
+                </listbox>-->
+
+                <div id="dv_salvar"> <button  style="color:white;background:green" onClick="@command('saveItemsProduto')" label="Salvar" width="100px" height="30px" />
+                    <button  onClick="@command('close')" label="Sair" style="background:gray;color:white"  />
+                    <!-- <button  onClick="@command('reset')" label="Reset"   />-->
+                </div>
+
+            </div>
+
+
+        </vbox>
+
+
+
+    </window>
+
+</zk>

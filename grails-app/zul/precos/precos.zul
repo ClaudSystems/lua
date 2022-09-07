@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+            viewModel="@id('vm') @init('precosViewModel')">
+
+<label id="info"/>
+        <label id="lblMessage" value="@bind(vm.message)"/>
+        <hbox>
+            <grid width="400px" style="margin-top:20px">
+                <columns>
+                    <column image="${z.resource(dir:'images', file:'precosg.png')}" label="" width="100x"/>
+                    <column label="Percentagem" width="300px"/>
+
+                </columns>
+                <rows >
+                    <row>
+                        <label value="Nome"/>
+                        <textbox constraint="no empty" value="@bind(vm.preco.nome)" width="100%"/>
+                    </row>
+                    <row>
+                        <label value="Preco de venda 1(%)"/>
+                        <decimalbox constraint="no empty" value="@bind(vm.preco.percentualPrecoDeVenda1)" width="100%"/>
+                    </row>
+                    <row>
+                        <label value="Preco de venda 2 (%)"/>
+                        <decimalbox constraint="no empty" value="@bind(vm.preco.percentualPrecoDeVenda2)" width="100%"/>
+                    </row>
+
+                    <row>
+                        <label value="Preco de venda 3 (%)"/>
+                        <decimalbox constraint="no empty " value="@bind(vm.preco.percentualPrecoDeVenda3)" width="100%"/>
+
+                    </row>
+                    <row>
+                        <label value="Ativo"/>
+                        <checkbox value="@bind(vm.preco.ativo)" checked="@bind(vm.preco.ativo)" width="100%"/>
+                    </row>
+
+                    <row>
+                        <cell colspan="2" style="text-align:center">
+                            <hlayout>
+
+                                <button image="${z.resource(dir:'images', file:'update.png')}"
+                                        style="color:white;background:#0000A0" onClick="@command('update')"
+                                        label="Actualizar"/>
+
+                                <button image="${z.resource(dir:'images', file:'cancelar.png')}" label="Cancelar"
+                                        onClick="@command('fecharEditor')"/>
+
+                            </hlayout>
+                        </cell>
+                    </row>
+                </rows>
+
+            </grid>
+            <vbox>
+                Neste formulario estabelecemos as percentagens a serem aplicados sobre o Preço Base de venda definido no campo de cadastro dos produtos
+                As percetagens serão aplicados em funcão da classificação de cada cliente. o preçc de venda1 coresponde a 1ª classe, o preço 2 a 2ª classe
+                e por último o preço3 a 3ª classe.
+                Somente um conjunto de preços pode ser defido como ativo, pois será ela que serão feitas os calculos do preço de venda.
+            <listbox    style="@bind('style')"     model="@load(vm.items)" width="100%"
+                      height="" mold="paging" pageSize="10" selectedItem="@bind(vm.preco)">
+                <listhead >
+                    <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+                    <listheader  width="50px"  onClick="@command('')"  align="left"/>
+                    <listheader  width="100px" label="Nome" align="left"/>
+                    <listheader width="200px" label="% de venda 1" align="left"/>
+                    <listheader width="200px" label="% de preco de venda 2" align="left"/>
+                    <listheader width="200px" label="% de preco de venda 3" align="left"/>
+                    <listheader width="200px" label="Ativo" align="left"/>
+
+
+
+                </listhead>
+
+                <template name="model" status="s">
+
+                    <listitem style="@bind('style')"  >
+                        <listcell  label="@bind(s.index)" />
+                        <listcell  label="@load(each.nome)"  />
+                        <listcell  label="@load(each.percentualPrecoDeVenda1)"    />
+                        <listcell  label="@load(each.percentualPrecoDeVenda2)"    />
+                        <listcell  label="@load(each.percentualPrecoDeVenda3)"    />
+                        <listcell  label="@load(each.ativo)"    />
+
+
+                    </listitem>
+                </template>
+
+            </listbox>
+            </vbox>
+        </hbox>
+
+
+
+    </window>
+
+</zk>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window id="win" apply="grailsBindComposer"
+        viewModel="@id('vm') @init('categoriaCrudViewModel')">
+
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+
+        <label id="info" />
+
+        <hbox>
+            <grid width="600px" style="margin-top:20px" visible="@bind(not empty vm.selectedItem)" >
+                <columns>
+                    <column  image="/images/categoria48.png" label="" width="20%" />
+                    <column label="@bind(vm.selectedItem.nome)" width="" />
+
+
+                </columns >
+                <rows id="rows">
+                    <row>
+                        <label value="Codigo"/>
+                        <textbox maxlength="4" constraint="no empty" value="@bind(vm.selectedItem.codigo)" validationMessages="@validator('codigoValidator')"  width="100%" />
+                    </row>
+                    <row>
+                        <label value="Nome"/>
+                        <textbox constraint="no empty" value="@bind(vm.selectedItem.nome)"   width="100%" />
+                    </row>
+
+                    <row>
+                      <!--  <button id="btnUpload" label="Upload" upload="true,maxsize=300" onUpload="@command('upload', upEvent=event)" />-->
+
+                        <div id="image" height="" style="overflow:auto" />
+                    </row>
+
+                    <row>
+                        <cell colspan="2" style="text-align:center">
+
+                            <hlayout>
+                                <hbox>
+                                    <div visible="@load(!vm.btsalvar)">
+                                        <button  image="${z.resource(dir:'images', file:'update.png')}" style="color:white;background:#0000A0"   onClick="@command('updateCategoria')" label="Adicionar Items a Categoria" />
+                                        <button  image="${z.resource(dir:'images', file:'remover.png')}"  style="color:white;background:#800000" onClick="@command('showHelp')"  onDoubleClick="@command('deleteItem')" label="Eliminar"  />
+                                    </div>
+                                    <button  image="${z.resource(dir:'images', file:'cancelar.png')}" label="Cancelar" onClick="@command('fecharEditor')" />
+                                    <div visible="@load(vm.btsalvar)" >
+                                        <button image="${z.resource(dir:'images', file:'save.png')}" label="Salvar"  style="color:white;background:blue"   onClick="@command('salvarItem')"  />
+                                    </div>
+
+                                </hbox>
+
+
+                            </hlayout>
+                        </cell>
+                    </row>
+
+
+                </rows>
+<!--Oi -->
+                <!--sdsadosasadjds dsadjdsajd -->
+            </grid>
+            <div width="">
+                <label  style="font-size:14pt" value="Lista das Categorias"/>
+                <div width="">
+                    <button  visible="@bind(!not empty vm.selectedItem)"  image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addItem')"   label="Add" />
+                    Filtragem:
+                    <textbox width=""  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+                    Codigo:
+                    <textbox width=""   style="background:#95B9C7;color:black" value="@bind(vm.codigo)" onChange="@command('viewItemByCodigo')" instant="true"/>
+                </div>
+                <listbox    style="@bind('style')"    selectedItem="@bind(vm.selectedItem)"  model="@load(vm.items)" width="100%"
+                            height="" mold="paging" pageSize="10" >
+
+
+                    <listhead >
+
+                        <listheader  width="90px" label="Item" align="left"/>
+                        <listheader  width="100px" label="Codigo" align="left"/>
+                        <listheader width="" label="Nome" align="left"/>
+                        <listheader width="" label="-" align="left"/>
+
+
+
+                    </listhead>
+                    <template name="model" var="item" status="s">
+
+                        <listitem style="@bind(item.color)" onDoubleClick="@command('')" onClick="@command('getSelectedCategoriaProdutoList', id=item.id)">
+                            <listcell  label="@bind(s.index)"/>
+                            <listcell   label="@load(item.codigo)"  />
+                            <listcell onClick="@command('showCategoryItems')"  label="@load(item.nome)"  />
+                            <listcell onClick="@command('showCategoryItems')"  style="@load(item.color)" />
+
+
+                        </listitem>
+                    </template>
+
+                </listbox>
+            </div>
+        </hbox>
+        <hbox>
+
+
+        </hbox>
+
+<hbox  visible="@bind(not empty vm.selectedItem)">
+
+
+        <div width="">
+            <label  style="font-size:14pt" value="Lista dos Produtos"/>
+
+            <div width="">
+                Filtragem:
+                <textbox width=""  style="background:#95B9C7;color:black" value="@bind(vm.filterProduto)" onChange="@command('doSearchProduto')" instant="true"/>
+                Codigo:
+                <textbox width=""  style="background:#95B9C7;color:black" value="@bind(vm.codigoProduto)" onChange="@command('addItemByCodigoProduto')" instant="true"/>
+            </div>
+            <listbox    style="@bind('style')"    selectedItem="@bind(vm.selectedProduto)"  model="@load(vm.itemsProdutos)" width="100%"
+                        height="" mold="paging" pageSize="10" >
+                <listhead >
+                    <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+                    <listheader  width="90px" label="Item" align="left"/>
+                    <listheader  width="200px" label="Codigo" align="left"/>
+                    <listheader width="" label="Nome" align="left"/>
+
+
+
+
+                </listhead>
+                <template  name="model" var="item" status="s">
+
+                    <listitem style="@bind('style')"   onDoubleClick="@command('addSelectedProduto', index=s.index)">
+
+                        <listcell  label="@bind(s.index)"/>
+                        <listcell  label="@load(item.codigo)"  />
+                        <listcell  label="@load(item.nome)"  />
+
+
+                    </listitem>
+                </template>
+
+            </listbox>
+        </div>
+    <div width="" >
+
+        <label  style="font-size:15pt;color:red" value="@load(vm.selectedItem.nome)"/>
+        <listbox    style="@bind('style')"    selectedItem="@bind(vm.selectedCategoriaProduto)"  model="@load(vm.selectedItem.produtos)" width="100%"
+                    height="" mold="paging" pageSize="10" >
+            <listhead >
+                <listheader  width="90px" label="Codigo" align="left"/>
+                <listheader  width="200px" label="Nome" align="left"/>
+                <listheader width="" label="Descricao" align="left"/>
+                <listheader width="50px" label="-" align="left"/>
+
+            </listhead>
+            <template   name="model" var="item" status="s">
+
+                <listitem  >
+                    <listcell  style="@bind(vm.selectedItem.color)" onDoubleClick="@command('removeSelectedProduto', index=s.index)"   label="@bind(item.codigo)"/>
+                    <listcell  onDoubleClick="@command('removeSelectedProduto', index=s.index)"  label="@load(item.nome)"  />
+                    <listcell  onDoubleClick="@command('removeSelectedProduto', index=s.index)"  label="@load(item.descricao)"  />
+
+
+                </listitem>
+            </template>
+
+        </listbox>
+
+    </div>
+</hbox>
+    </window>
+
+</zk>

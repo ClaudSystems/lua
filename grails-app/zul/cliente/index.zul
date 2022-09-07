@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="cliente.IndexComposer">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+
+
+
+        <vbox id="scaffoldingBox"/>
+        <label id="lb_info" style="color:green"/>
+        <button id="bt_add_cliente" label="Add Cliente" style="background:blue;color:white"  />
+        <button id="bt_add_filter" label="Filtragem" style="background:blue;color:white"  />
+        <div id="dv_filter" visible="false">
+
+
+
+
+        </div>
+        <grid width="50%" visible="false" id="gd_cliente" >
+
+
+        <columns>
+            <column label="Designação" width="40%" />
+            <column label="Conteúdo" width="" />
+
+
+
+           </columns >
+            <rows id="rows">
+            <row>
+                <label value="Codigo"/>
+                <textbox constraint="no empty" id="tb_codigo" width="100%" />
+            </row>
+                <row>
+                    <label value="Nome"/>
+                    <textbox constraint="no empty"  id="tb_nome" width="100%" />
+                </row>
+                <row>
+                    <label value="Nuit"/>
+                    <textbox constraint="no empty" id="tb_nuit" width="100%"  />
+                </row>
+                <row>
+                    <label value="Nº Telefone"/>
+                    <intbox constraint="no negative" id="tb_telefone" width="100%"/>
+                </row>
+                <row>
+                    <label value="Email"/>
+                    <textbox  constraint="/.+@.+\.[a-z]+/: Insira um endereço de email válido!"   id="tb_mail" width="100%" />
+                </row>
+                <row>
+                    <label value="Endereço"/>
+                    <textbox  id="tb_endereco" width="100%" />
+                </row>
+
+
+                <row>
+                    <cell colspan="2" style="text-align:center">
+                        <hlayout>
+
+                           <div id="dv_salvar"> <button  style="color:white;background:green"   id="bt_salvar" label="Salvar" width="100px" height="30px" /></div>
+                            <button  style="color:white;background:#0000A0"   id="bt_update" label="Actualizar" width="100px" height="30px" />
+                           <div id="dv_delite"><button  style="color:white;background:#800000"   id="bt_delite" label="Eliminar" width="100px" height="30px" /></div>
+
+                        </hlayout>
+                    </cell>
+                </row>
+            </rows>
+
+        </grid>
+        <listbox autopaging="true" id="lb_clientes"  >
+            <listhead sizable="true">
+                <listheader label="Codigo" sort="auto" />
+                <listheader label="Nome" sort="auto" />
+                <listheader label="Nuit" sort="auto" />
+                <listheader label="Email" sort="auto" />
+                <listheader label="Telefone" sort="auto" />
+                <!--<listheader label="Endereço" sort="auto" />-->
+            </listhead>
+
+            <listfoot>
+                <listfooter>
+
+                </listfooter>
+                <listfooter>
+
+                </listfooter>
+            </listfoot>
+        </listbox>
+
+
+    </window>
+
+</zk>

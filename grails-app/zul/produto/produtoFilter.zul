@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window onCancel="@command('close')" apply="grailsBindComposer"
+        viewModel="@id('vm') @init('produtoFilterViewModel')"  >
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+        <vbox width="">
+            <hbox>
+            Fornecedor: <combobox onCreate="@command('renderCb_fornecedores')" constraint="" width="300px" id="cb_fornecedores" autodrop="true"/>
+            Refs. da Factura:
+            <textbox width="200px"  style="background:#95B9C7;color:black" value="@bind(vm.fatura)" onChange="@command('doSearch')" instant="true"/>
+            </hbox>
+            <div>
+                <listbox id="lb_items"  mold="paging" pageSize="20" context="mp_edit" multiple="true" >
+
+                    <listhead >
+                        <listheader width="15%" sort="auto" label="Codigo" />
+                        <listheader width="60%"  label="Descrição" />
+                        <listheader sort="5%" width="10%" label="Qtd" />
+                        <listheader width="15%"  label="Valor Unitário" />
+                        <!--<listheader width="5%"  label="Select" />-->
+                    </listhead>
+                    <listitem >
+                        <listcell><textbox id="tb_cod"  onChange="@command('addFirstItem')" width="100%" /></listcell>
+                        <listcell><textbox id="tb_desc" width="100%" /></listcell>
+                        <listcell><intbox id="ib_qt" constraint="no negative , no empty " width="100%" /></listcell>
+                        <listcell><doublebox id="db_vu" width="100%" /></listcell>
+                        <listcell><checkbox id="cb_ck" width="100%" /></listcell>
+                    </listitem>
+                </listbox>
+
+                <div id="dv_salvar"> <button  style="color:white;background:green" onClick="@command('saveItemsProduto')"  id="bt_salvar" label="Salvar" width="100px" height="30px" />
+                    <button  onClick="@command('close')" label="Sair" style="background:gray;color:white"  />
+                   <!-- <button  onClick="@command('reset')" label="Reset"   />-->
+                </div>
+                <menupopup id="mp_edit">
+                    <menuitem id="mi_remover" label="Remover items seleccionados" />
+
+                    <menuitem id="mi_remover_todos" label="Remover Todos" />
+
+                </menupopup>
+            </div>
+
+            <div>
+                Filtragem:
+                <textbox width="80%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+
+                <hbox>
+
+                    <div width="100%">
+                        <listbox id="lb_filter" selectedItem="@bind(vm.pickedItem)"  model="@load(vm.items)" width="100%"
+                                 height="" mold="paging" pageSize="10" >
+                            <listhead>
+                                <listheader label="Codigo" align="left"/>
+                                <listheader width="" label="Nome" align="left"/>
+                                <listheader width="" label="Descrição" align="left"/>
+                                <listheader width="" label="Saldo" align="left"/>
+                            </listhead>
+                            <template name="model" var="item">
+                                <listitem style="@bind('style')" onDoubleClick="@command('addSelectedtItem')" onClick="@command('changeSyte')">
+                                    <listcell  label="@load(item.codigo)"  />
+                                    <listcell  label="@load(item.nome)"    />
+                                    <listcell  label="@load(item.descricao)"   />
+                                    <listcell  label="@load(item.saldo)"  />
+                                </listitem>
+                            </template>
+
+                        </listbox>
+                    </div>
+                    <div width="">
+
+
+                    </div>
+                </hbox>
+            </div>
+        </vbox>
+
+
+
+    </window>
+
+
+
+</zk>

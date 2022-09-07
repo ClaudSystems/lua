@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    <style>
+        body { background-color: #eaeaea; }
+        .z-textbox{ border-style : none; background: #FFF}
+        .z-intbox{ border-style : none; background: #FFF}
+        .z-doublebox{ border-style : none; background: #FFF}
+        .z-listcell{ border-style : none; background: #FFF}
+
+    </style>
+
+    <window apply="entradadeproduto.IndexComposer">
+
+        <vbox id="scaffoldingBox"/>
+        <button id="bt_filter_produto" label="PEsquisar produto"  style="background:#4863A0;color:white"  />
+        <textbox width="300px" style="background:#95B9C7;color:black" id="tb_codigo_produto" value="digite codigo do produto por adicionar"/>
+        <!--  <button id="bt_close" label="Home"  style="background:#ADD8E6;color:white"  />-->
+
+        Fornecedor <combobox  width="20%" id="cb_fornecedores" autodrop="true">
+    </combobox>
+        Descrição  <textbox width="300px" style="background:#95B9C7;color:black" id="tb_descricao" value="Descrição"/>
+        <listbox id="lb_items"  mold="paging" pageSize="20" context="mp_edit" multiple="true" >
+
+            <listhead>
+                <listheader width="15%" sort="auto" label="Codigo" />
+                <listheader width="60%"  label="Descricao" />
+                <listheader sort="auto" width="10%" label="Qtd" />
+                <listheader width="20%"  label="Valor Unitário" />
+                <listheader width="10%"  label="Select" />
+            </listhead>
+        </listbox>
+        <div id="dv_salvar"> <button  style="color:white;background:green"   id="bt_salvar" label="Salvar" width="100px" height="30px" /></div>
+        <menupopup id="mp_edit">
+            <menuitem id="mi_remover" label="Remover" />
+
+            <menuitem id="mi_remover_todos" label="Remover Todos" />
+
+        </menupopup>
+
+        <listbox visible="false" id="lb_encomendas"  mold="paging" pageSize="20" context="mp_edit" multiple="true" >
+
+            <listhead>
+                <listheader width="15%" sort="auto" label="ID" />
+                <listheader width="60%"  label="Descricao" />
+                <listheader sort="auto" width="10%" label="Estado" />
+
+            </listhead>
+        </listbox>
+
+    </window>
+
+</zk>

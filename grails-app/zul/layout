@@ -1,0 +1,175 @@
+
+
+        <borderlayout sclass="complex-layout" height="810px">
+
+            <!-- Sidebar -->
+            <west width="200px" border="0" flex="true" splittable="true"
+                  margins="0,5,0,0">
+                <vlayout spacing="0">
+                    <panel width="100%" border="normal"
+                           title="Navigation">
+                        <panelchildren style="padding:5px;">
+                            <vbox>
+                                <toolbarbutton label="Home" />
+                                <toolbarbutton label="Sitemap" />
+                                <toolbarbutton
+                                        label="Statement of Direction" />
+
+                                <toolbarbutton label="ZK Team" />
+                                <toolbarbutton label="Releases" />
+                                <toolbarbutton label="Calender" />
+                            </vbox>
+                        </panelchildren>
+                    </panel>
+
+                    <panel width="100%" border="normal"
+                           title="Features">
+                        <panelchildren>
+                            <html>
+                                <![CDATA[ <ul> <li>Server+client
+                                Fusion</li> <li>Ajax-as-a-Service</li>
+                                <li>The Event Queue</li> <li>jQuery
+                                Based</li> <li>SEO Friendly</li>
+                                <li>Auto Testing</li> </ul> ]]>
+                            </html>
+                        </panelchildren>
+                    </panel>
+                </vlayout>
+            </west>
+
+            <!-- Content -->
+            <center>
+                <borderlayout sclass="inner-border">
+                    <north border="0" height="4%" margins="2,3,0,0">
+                        <label value="HOME" style="font-size:20px;" />
+                    </north>
+                    <center border="0" margins="0,3,3,3">
+                        <panel title="Reference" border="normal"
+                               height="100%">
+                            <panelchildren>
+                                <grid style="border:0;">
+                                    <rows>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/images/Java_Logo.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Java Doc" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/img/Centigrade-Widget-Icons/Calendar-16x16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Project Calendar" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/img/Centigrade-Widget-Icons/BookBlue-16x16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="ZK Essentials" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/img/Centigrade-Widget-Icons/BookGreen-16x16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Developer's Reference" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/img/Centigrade-Widget-Icons/BookBrown-16x16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Component Essentials" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/img/Centigrade-Widget-Icons/Booklet-16x16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Style Guide" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/img/Centigrade-Widget-Icons/Envelope-16x16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Mailing Lists" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/images/twitter_16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="Twitter" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/images/linkedin_16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="LinkedIn" />
+                                            </div>
+                                        </row>
+                                        <row>
+                                            <div>
+                                                <image
+                                                        src="/images/rss_16.png" />
+                                                <separator
+                                                        orient="vertical" />
+                                                <toolbarbutton
+                                                        label="RSS" />
+                                            </div>
+                                        </row>
+                                    </rows>
+                                </grid>
+                            </panelchildren>
+                        </panel>
+                    </center>
+                    <east border="0" width="50%" margins="0,0,3,3">
+                        <panel title="Customer Overview" border="normal"
+                               height="100%" hflex="1">
+                            <panelchildren>
+                                Continent Contribution to Total Visitors
+
+                            </panelchildren>
+                        </panel>
+                    </east>
+                    <south border="1" height="37%" margins="0,0,3,3">
+                        <panel border="normal">
+
+                        </panel>
+                    </south>
+                </borderlayout>
+            </center>
+
+        </borderlayout>
+

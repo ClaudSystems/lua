@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('contabilidadeViewModel')">
+
+        <label id="info"/>
+        <hbox>
+            <hbox spacing="0">
+                <menubar id="menubar" orient="horizontal" autodrop="true">
+                    <menu width="200px"  image="${z.resource(dir:'images', file:'cadastro.png')}" label="Cadastro">
+                        <menupopup>
+                            <menuitem  image="${z.resource(dir:'images', file:'dstin.png')}" label="Destino" onClick="@command('showDestino')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'produt.png')}" label="Produtos" onClick="@command('showProduto')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'embalagem.png')}" label="Unidades" onClick="@command('showUnidades')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'model.png')}" label="Modelos" onClick="@command('showModelos')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'lote.png')}" label="Lotes" onClick="@command('showLotes')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'restaurante_32.png')}" label="Mesas" onClick="@command('showMesas')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'categoria32.png')}" label="Categorias de Produtos" onClick="@command('showCategorias')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'embalagem.png')}" label="Unidades" onClick="@command('showUnidades')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'classe.png')}" label="Classes de Clientes" onClick="@command('showClasses')" />
+                        </menupopup>
+                    </menu>
+                    <menu width="200px" image="${z.resource(dir:'images', file:'vendas.png')}"  label="Vendas">
+                        <menupopup>
+                            <!-- <menu width="200px" image="${z.resource(dir:'images', file:'cotacao.png')}"  label="Cotações">
+                                 <menupopup   >-->
+
+                            <menuitem image="${z.resource(dir:'images', file:'new_doc.png')}" label="Nova Cotação" onClick="@command('showNovaCotacao')" />
+                            <menuitem image="${z.resource(dir:'images', file:'list_doc.png')}" label="Cotações" onClick="@command('showCotacoes')" />
+
+                            <menuseparator/>
+                            <!--      </menupopup>
+                              </menu>-->
+                            <menuitem image="${z.resource(dir:'images', file:'new_doc.png')}" label="Nova Fatura" onClick="@command('showNovaFatura')" />
+                            <menuitem image="${z.resource(dir:'images', file:'list_doc.png')}" label="Faturas" onClick="@command('showFaturas')" />
+                            <!-- <menu onClick="@command('showFaturas')" width="200px"  image="${z.resource(dir:'images', file:'invoice.png')}"  label="Faturas">
+                                 <menupopup   >
+
+                                 </menupopup>
+                             </menu>-->
+                            <!-- <menu width="200px" image="${z.resource(dir:'images', file:'invoice.png')}"  label="VDs">
+                                 <menupopup   >
+
+                                 </menupopup>
+                             </menu>-->
+                            <!--  <menu label="Input">
+                                  <menupopup>
+                                      <menu label="Devices">
+                                          <menupopup>
+                                              <menuitem label="Mouse" onClick="alert(self.label)" />
+                                              <menuitem label="Keyboards" onClick="alert(self.label)" />
+                                              <menuitem label="Accessories" onClick="alert(self.label)" />
+                                          </menupopup>
+                                      </menu>
+                                      <menuitem label="Gaming" onClick="alert(self.label)" />
+                                      <menuitem label="Graphic Tablets" onClick="alert(self.label)" />
+                                  </menupopup>
+                              </menu>-->
+                            <!-- <menu width="200px" image="${z.resource(dir:'images', file:'pos.png')}" label="POS">
+                                 <menupopup>
+
+                                 </menupopup>
+                             </menu>-->
+                            <menuseparator/>
+                            <menuitem image="${z.resource(dir:'images', file:'new_doc.png')}" label="Nova VD" onClick="@command('showNovaVD')" />
+                            <menuitem image="${z.resource(dir:'images', file:'list_doc.png')}" label="VDs" onClick="@command('showVDs')" />
+                            <menuseparator/>
+                            <menuitem image="${z.resource(dir:'images', file:'restaurante_32.png')}" label="POS Restaurante" onClick="@command('showPosRestaurante')" />
+
+                            <menuitem image="${z.resource(dir:'images', file:'open_diario.png')}" label="Diário" onClick="@command('showDiario')" />
+                            <menuseparator/>
+                        </menupopup>
+                    </menu>
+
+                    <menu width="200px" image="${z.resource(dir:'images', file:'compra.png')}" label="Compras">
+                        <menupopup width="200px" >
+                            <menuitem width="200px" image="${z.resource(dir:'images', file:'new_doc.png')}" label="Nova Entrada" onClick="@command('showNewEntrada')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'list_doc.png')}" label="Entradas" onClick="@command('showEntradas')" />
+                        </menupopup>
+                    </menu>
+                    <menu width="200px" image="${z.resource(dir:'images', file:'estoque.png')}" label="Stock">
+                        <menupopup>
+                            <menuitem width="200px"  image="${z.resource(dir:'images', file:'buy-32.png')}" label="Entradas" onClick="@command('showEntradas')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'venda_32.png')}" label="Saidas" onClick="@command('showSaidas')" />
+                            <menuitem  image="${z.resource(dir:'images', file:'armazem.png')}" label="Armazens" onClick="@command('showArmazens')" />
+
+                        </menupopup>
+                    </menu>
+
+
+                </menubar>
+
+
+            </hbox>
+
+            <menubar orient="horizontal" autodrop="true">
+
+            </menubar>
+
+
+        </hbox>
+
+    </window>
+
+</zk>

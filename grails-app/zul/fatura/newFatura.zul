@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('newFaturaViewModel')">
+
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+<!--
+       <label  style="color:red" visible="@bind(vm.labelInfo)" value="Fatura No. "/> <label style="color:red" value="@load(vm.fatura.id)"/><label style="color:red" visible="@bind(vm.labelInfo)" value=", criada com sucesso!"/>
+-->
+        <label id="info"/>
+
+        <hbox>
+
+            <vbox  >
+                <!-- <button onClick="@command('editarCotacao')" label="Editar Cotação" style="background:blue;color:white"  />-->
+                <!-- <div>
+                     Cliente:  <button  image="${z.resource(dir:'images', file:'add.png')}" style="color:white;background:#0000A0"   onClick="@command('showCliente')" label="@load(vm.cliente.nome)" />
+                 </div>-->
+
+                <div>
+                    <label value="Cliente:" />
+                    <combobox model="@load(vm.clientes)" hflex="1"
+                              selectedItem="@bind(vm.cliente)"
+                              mold="rounded" autodrop="true" autocomplete="true">
+                        <template name="model">
+                            <comboitem
+                                    label="@load(each.nome)" value="@load(each.id)" />
+                        </template>
+                    </combobox>
+
+                </div>
+                <button  image="${z.resource(dir:'images', file:'update.png')}" style="color:white;background:#0000A0"   onClick="@command('showCliente')" label="@load(vm.cliente.nome)" />
+
+            </vbox>
+            <grid width="320px"  visible="@load(vm.viewCliente)" >
+                <columns>
+                    <column  width="30%"/>
+                    <column/>
+                </columns>
+                <rows>
+                    <row>Codigo: <textbox width="100%"  readonly="false" constraint="no empty" value="@bind(vm.cliente.codigo)"  onChange='@command("")' /></row>
+                    <row>Nome: <textbox width="100%"   readonly="false" constraint="no empty"  value="@bind(vm.cliente.nome)"  onChange='@command("")' /></row>
+                    <row>Nuit:  <textbox width="100%"   readonly="false" constraint="no empty" value="@bind(vm.cliente.nuit)"  onChange='@command("")' /></row>
+                    <row>
+                        <label value="Classe"/>
+                        <combobox value="@bind(vm.cliente.classe)" >
+                            <comboitem label="primeira"/>
+                            <comboitem label="segunda"/>
+                            <comboitem label="terceira"/>
+                        </combobox>
+                    </row>
+                    <row>No. de Tel.:  <textbox width="100%"   constraint="no empty" value="@bind(vm.cliente.numTelefone)"  onChange='@command("")' /></row>
+
+                    <row>Email:  <textbox width="100%"   constraint="/.+@.+\.[a-z]+/: Insira um endereço de email válido!" value="@bind(vm.cliente.mail)"  onChange='@command("")' /></row>
+                    <row>Endereço:  <textbox width="100%"   constraint="no empty"  value="@bind(vm.cliente.endereco)"  onChange='@command("")' /></row>
+                    <row> <button image="${z.resource(dir:'images', file:'save.png')}" label="Salvar"  style="color:white;background:blue"   onClick="@command('salvarCliente')"  />
+                        <button  image="${z.resource(dir:'images', file:'update.png')}" style="color:white;background:#0000A0"   onClick="@command('updateCliente')" label="@load(vm.cliente.nome)" />
+
+                    </row>
+
+                </rows>
+
+            </grid>
+            <grid width="400px">
+                <rows sclass="narrow">
+
+                    <row>
+                        <vbox><label style="font-size:14pt" value="sub total "/><label style="font-size:14pt" value="iva"/><label style="font-size:14pt;font-weight:bold" value="total"/></vbox>
+                        <vbox>
+                            <label style="font-size:14pt" value="@bind(vm.fatura.valor) @converter('formatedNumber', format='###,##0.00')  "/>
+                            <label style="font-size:14pt"  value="@bind(vm.fatura.valorDoIva)  @converter('formatedNumber', format='###,##0.00')"/>
+                            <label style="font-size:15pt;font-weight:bold" value="@bind(vm.fatura.valorDoIva+vm.fatura.valor)  @converter('formatedNumber', format='###,##0.00')"/>
+                        </vbox>
+
+                    </row>
+
+                </rows>
+            </grid>
+            <div visible="true">
+
+                <button visible="@bind(vm.bt_save)" image="${z.resource(dir:'images', file:'save.png')}" label="Salvar"  style="color:white;background:blue"   onClick="@command('createFatura')"  />
+                <button  id="bt_printer"  image="${z.resource(dir:'images', file:'printer.png')}" label="Imprimir" onClick="@command('imprimir')" />                <!--
+                                <button  image="${z.resource(dir:'images', file:'remover.png')}"  style="color:white;background:#800000"   onClick="@command('deleteFatura')" label="Eliminar"  />
+                -->
+            </div>
+            <button  image="${z.resource(dir:'images', file:'cancelar.png')}"  style="color:white;background:#800000"  label="Cancelar" onClick="@command('fecharEditor')" />
+            <button  image="${z.resource(dir:'images', file:'edit_25.png')}"  style="color:blue"  label="Editar" onClick="@command('editarFatura')" />
+
+        </hbox>
+        <listbox multiple="true"    style="@bind('style')"    selectedItem="@bind(vm.selectedItemProduto)"  model="@load(vm.items)" width="100%"
+                 height="" mold="paging" pageSize="10" >
+            <listhead >
+                <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+
+
+                <listheader width="5%" sort="auto" label="ID" />
+                <listheader width="15%" sort="auto" label="Codigo" />
+                <listheader width="60%"  label="Descrição" />
+                <listheader sort="5%" width="10%" label="Qtd" />
+                <listheader width="15%"  label="Valor Unitário" />
+                <listheader width="15%"  label="Sub Total" />
+                <listheader width="10%"  label="IVA" />
+                <listheader width="10%"  label="Remover" />
+
+
+            </listhead>
+            <template name="model" var="item" status="s">
+
+                <listitem style="@bind('style'))">
+                    <listcell label="@bind(s.index)" />
+                    <listcell style="border:none"   ><textbox   onBlur="@command('showMe')"    style="border:none" width="100%"  value="@bind(item.produto.codigo)" /></listcell>
+                    <listcell style="border:none"   ><textbox  style="border:none" width="100%" value="@bind(item.descricao)" /></listcell>
+                    <listcell style="border:none"   ><intbox  onChange="@command('updateFatura')" style="border:none" width="100%" constraint="no negative, no zero" value="@bind(item.qtd)" /></listcell>
+                    <listcell style="border:none"   ><decimalbox format="###,##0.00" onChange="@command('updateFatura')"  constraint="no negative, no zero" style="border:none" width="100%" value="@bind(item.precoDeVenda)  " /></listcell>
+                    <listcell style="border:none"  label="@bind(item.qtd*item.precoDeVenda) @converter('formatedNumber', format='###,##0.00')"    />
+                    <listcell> <checkbox  checked="@load(item.ivaAplicado)"   onClick="@command('alterarIva', index=s.index))"    /></listcell>
+
+                    <listcell>
+                        <hbox>
+
+                            <button    image="${z.resource(dir:'images', file:'remover.png')}" onClick="@command('removeItem', index=s.index)"  />
+                        </hbox>
+                    </listcell>
+
+                </listitem>
+            </template>
+
+        </listbox>
+        Filtragem:
+        <textbox width="44%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+        Codigo:
+        <textbox width="20%"  style="background:#95B9C7;color:black" value="@bind(vm.codigo)" onChange="@command('addItemByCode')" instant="true"/>
+        <div width="100%">
+            <listbox  checkmark="true"   style="@bind('style')"     model="@load(vm.itemsProduto)" width="100%"
+                     height="" mold="paging" pageSize="10" >
+                <listhead >
+                    <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
+                    <listheader  width="90px" label="Item" align="left"/>
+                    <listheader sort="auto(codigo)" width="100px" label="Codigo" align="left"/>
+                    <listheader sort="auto(nome)" width="300px" label="Nome" align="left"/>
+                    <listheader sort="auto(descricao)" width="" label="Descrição" align="left"/>
+                    <listheader sort="auto(precoDeVenda)" width="" label="Preço De Venda" align="left"/>
+                    <listheader sort="auto(valorDoIva)" width="" label="IVA" align="left"/>
+                    <listheader sort="auto(precoTotalDeVenda)" width="" label="V. Liquido" align="left"/>
+                    <listheader sort="auto(saldo)" width="100px" label="Saldo" align="left"/>
+
+
+                </listhead>
+                <template name="model" status="s">
+
+                    <listitem  onDoubleClick="@command('addSelectedItem', index=each.id)" style="@bind('style')">
+                        <listcell label="@bind(s.index)"/>
+                        <listcell  label="@load(each.codigo)"  />
+                        <listcell  label="@load(each.nome)"    />
+                        <listcell  label="@load(each.descricao)"   />
+                        <listcell  label="@load(each.precoDeVenda)@converter('formatedNumber', format='###,##0.00')"   />
+                        <listcell  label="@load(each.valorDoIva)@converter('formatedNumber', format='###,##0.00')"   />
+                        <listcell  label="@load(each.precoTotalDeVenda)@converter('formatedNumber', format='###,##0.00')"   />
+                        <listcell  label="@load(each.saldo)"   />
+                    </listitem>
+                </template>
+
+            </listbox>
+        </div>
+
+    </window>
+
+</zk>

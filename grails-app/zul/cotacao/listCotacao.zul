@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('listCotacaoViewModel')">
+
+        <style>
+        body { background-color: #eaeaea; }
+        .z-textbox{ border-style : none; background: #FFF}
+        .z-intbox{ border-style : none; background: #FFF}
+        .z-doublebox{ border-style : none; background: #FFF}
+        .z-listcell{ border-style : none; background: #FFF}
+        <!--  .z-columns{ background: #ccccff}
+          .z-column{ background: #ccccff}
+          .z-listheader{ background: #ccccff}
+          .z-listhead{ background: #ccccff}-->
+    </style>
+    <label id="info"/>
+        <div>
+<!--
+            <button    image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('createNewCotacao')"   label="Add" />
+-->
+            ID : <textbox width="10%"  style="background:#95B9C7;color:black" value="@bind(vm.id)" onChange="@command('findItem')" instant="true"/>
+            Filtragem:
+            <textbox width="20%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+            a filtragem por data segui o seguinte formato "aaaa-MM-dd" exemplo "2018-12-01"
+
+
+            <hbox>
+
+                <div width="50%">
+                    <listbox  multiple="true" id="lb_filter" selectedItem="@bind(vm.pickedItem)"  model="@load(vm.items)" width="700px"
+                              height=""  mold="paging" pageSize="10" >
+
+                        <listhead>
+                            <listheader  sort="auto(numeroDaCotacao)" width="100px" label="No." align="left"/>
+                            <listheader sort="auto(cliente)" width="" label="Nome do Cliente" align="left"/>
+                            <listheader sort="auto(valor)" width="100px" label="Total" align="left"/>
+                            <listheader sort="auto(dateCreated)" width="80px" label="Data" align="left"/>
+                            <listheader width="50px" label="Del." align="left"/>
+
+                        </listhead>
+                        <template name="model" var="item" status="s">
+
+                            <listitem style="@bind('style')"  onDoubleClick="@command('showIt',id=item.id)" onClick="@command('viewItems', id=item.id)">
+
+                                <listcell  label="@load(item.numeroDaCotacao)"  />
+                                <listcell  label="@load(item.cliente)"  />
+                                <listcell   label="@load(item.valor)  @converter('formatedNumber', format='###,##0.00') "    />
+                                <listcell  label="@load(item.dateCreated)@converter('formatedDate', format='dd/MM/yyyy') "   />
+                                <listcell>
+                                    <hbox>
+                                        <button onDoubleClick="@command('deleteItem', index=s.index)"  image="${z.resource(dir:'images', file:'remover.png')}"
+                                                onClick="@command('removeItem', index=s.index)"/>
+                                    </hbox>
+                                </listcell>
+
+                            </listitem>
+                        </template>
+
+                    </listbox>
+                </div>
+                <div width="50%">
+                    <grid width="600px" model="@load(vm.itemList)">
+                        <columns>
+                            <column label="Descrição" width="" />
+                            <column width="100px" label="QTD" />
+                            <column width="150px" label="Valor" />
+
+                        </columns>
+                        <template name="model"  var="item"  >
+                            <row>
+                                <label value="@bind(item.produto.nome)" />
+                                <label value="@bind(item.qtd)" />
+                                <label value="@bind(item.precoDeVenda) @converter('formatedNumber', format='###,##0.00') "  />
+                            </row>
+                        </template>
+                    </grid>
+
+                </div>
+            </hbox>
+        </div>
+
+
+    </window>
+
+</zk>

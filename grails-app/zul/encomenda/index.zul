@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.zkoss.org/2005/zul"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window  apply="encomenda.IndexComposer">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+
+        </style>
+        <vbox id="scaffoldingBox"/>
+        <label id="lb_info" style="color:green"/>
+
+        <hbox>
+            <div width="">
+                <grid width="100%" visible="false" id="gd_encomenda">
+                    <columns>
+                        <column label="Encomenda" width="20%"/>
+                        <column width="80%" id="cl_id"/>
+                    </columns>
+                    <rows id="rows">
+
+                        <row>
+                            <label value="Fornecedor"/>
+                            <combobox width="100%" id="cb_fornecedores"
+                                      autodrop="true">
+                            </combobox>
+
+                        </row>
+
+                        <row>
+                            <label value="Descricao"/>
+                            <textbox  id="tb_descricao" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="Items"/>
+                            <listbox id="lb_items" context="mp_edit">
+                                <listhead sizable="true">
+
+                                    <listheader label="Produto" sort="auto"/>
+                                    <listheader label="Qtd" sort="auto"/>
+                                    <listheader label="Valor" sort="auto"/>
+
+                                </listhead>
+                            </listbox>
+                            <menupopup id="mp_edit">
+                                <menuitem id="mi_remover" label="Remover"/>
+                                <menuseparator/>
+                                <menuitem id="mi_add" label="Add"/>
+
+                            </menupopup>
+
+                        </row>
+
+
+                        <row>
+                            <cell colspan="2" style="text-align:center">
+                                <hlayout>
+
+
+                                    <div id="dv_delite">
+                                        <button style="color:white;background:#800000" id="bt_delite" label="Eliminar" width="100px" height="30px"/>
+                                        <button  style="color:white;background:#0000A0"   id="bt_update" label="Actualizar" width="100px" height="30px" />
+                                        <button style="color:white;background:green" id="bt_show" label="Imprimir"  width="100px" height="30px"/>
+                                        <button style="color:white;background:Gray" id="bt_close" label="Fechar"  width="100px" height="30px"/>
+                                    </div>
+
+                                </hlayout>
+                            </cell>
+                        </row>
+                    </rows>
+
+                </grid>
+               No. da encomenda <intbox width="300px" style="background:#95B9C7;color:black" id="ib_id" />
+                Filtro<textbox   id="tb_filter" value=""/>
+            </div>
+            <div  id="dv_direito" width="600px">
+                <label visible="true" id="lb_info_add" style="font-size:14pt" value=""/>
+                <grid id="gd_addItems" visible="false">
+                    <columns>
+                        <column label="Designacao" width="20%"/>
+                        <column label="Conteudo" width="80%"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Produto"/>
+                            <combobox width="100%" id="cb_produtos"/>
+                        </row>
+                        <row>
+                            <label value="Qtd"/>
+                            <intbox width="100%" id="ib_qtd"/>
+                        </row>
+                        <row>
+                            <label value="Valor"/>
+                            <doublebox width="100%" id="db_valor"/>
+                        </row>
+                        <row>
+                            <label/>
+                            <div id="dv_salvar">
+                                <button style="color:white;background:green" id="bt_add" label="Add"  width="100px" height="30px"/>
+                            </div>
+                        </row>
+                    </rows>
+                </grid>
+
+            </div>
+
+        </hbox>
+
+
+        <listbox  mold="paging" pageSize="10" id="lb_encomendas">
+            <listhead sizable="true">
+
+                <listheader sort="auto" label="ID" width="10%"/>
+                <listheader sort="auto" label="Descricao" width="50%"/>
+                <listheader sort="auto" label="Fornecedor" width="40%"/>
+                <listheader sort="auto" label="estado" width="20%"/>
+                <listheader sort="auto" label="tipo" width="20%"/>
+            </listhead>
+
+
+        </listbox>
+    </window>
+
+</zk>

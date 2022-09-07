@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('saidaListViewModel')">
+        <label id="info"/>
+
+        <div>
+            <button image="${z.resource(dir:'images', file:'add.png')}" style="color:white;background:green"
+                    onClick="@command('showNewSaida')" label="Add"/>
+            Filtragem:
+            <textbox width="20%" style="background:#95B9C7;color:black" value="@bind(vm.filter)"
+                     onChange="@command('doSearch')" instant="true"/>
+
+            <hbox>
+
+                <div width="100%">
+                    <listbox id="lb_filter" selectedItem="@bind(vm.selectedSaida)" model="@load(vm.items)" width="100%"
+                             height="" mold="paging" pageSize="5">
+                        <listhead>
+                            <listheader sort="auto(numeroDeSaida)" width="110px" label="Nº." align="left"/>
+                            <listheader sort="auto(dateCreated)" width="150px" label="Data da criacao" align="left"/>
+                            <listheader sort="auto(destino)" width="200px" label="Destino" align="left"/>
+                            <listheader sort="auto(cliente)" width="" label="Cliente" align="left"/>
+                            <listheader sort="auto(utilizador.username)" width="150px" label="Usuario" align="left"/>
+                            <listheader sort="auto(cancelado)" width="90px" label="Cancelado" align="left"/>
+                            <listheader width="50px" label="Del." align="left"/>
+
+                        </listhead>
+                        <template name="model" var="item" status="s">
+                            <listitem style="@bind('style')" onDoubleClick="@command('removeItem')"
+                                      onClick="@command('getSelectedItems')">
+
+                                <listcell label="@load(item.numeroDeSaida)"/>
+                                <listcell label="@load(item.dateCreated)@converter('formatedDate', format='dd/MM/yyyy')"/>
+                                <listcell label="@load(item.destino)"/>
+                                <listcell label="@load(item.cliente)"/>
+                                <listcell label="@load(item.utilizador.username)"/>
+                                <listcell label="@load(item.cancelado)"/>
+
+                                <listcell>
+                                    <hbox>
+
+                                        <button image="${z.resource(dir:'images', file:'remover.png')}"
+                                                onDoubleClick="@command('removeItem', id=item.id)"/>
+                                    </hbox>
+                                </listcell>
+                            </listitem>
+                        </template>
+
+                    </listbox>
+                </div>
+                <div width="50%">
+                    <grid width="400px" model="@load(vm.selectedItems)">
+                        <columns>
+                            <column label="Descrição" width="300px"/>
+                            <column label="QTD"/>
+                            <column label="Valor"/>
+
+                        </columns>
+                        <template name="model" var="item">
+                            <row>
+
+                                <label value="@bind(item.produto.nome)"/>
+                                <label value="@bind(item.qtd)"/>
+                                <label value="@bind(item.precoDeCompra) @converter('formatedNumber', format='###,##0.00') "/>
+
+                            </row>
+                        </template>
+                    </grid>
+
+                </div>
+            </hbox>
+        </div>
+
+    </window>
+
+</zk>

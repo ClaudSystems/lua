@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('settingsViewModel')">
+        <label id="info"/>
+       <grid width="400px">
+           <rows>
+               <row width="400px">Permitir Saldo Negativo:<label value="@load(vm.settings.aceitarSaidasSemEstoque)" /> </row>
+               <row><button onClick="@command('aceitarSaidasSemEstoque')" label="Mudar"/> </row>
+               <row>Refletir Saidas  De Vds no Estoque:<label value="@load(vm.settings.refletirSaidasEmEstoqueDeVds)" /> </row>
+               <row><button onClick="@command('refletirSaidasEmEstoqueDeVds')" label="Mudar"/> </row>
+               <row>Imprimir mini VD:<label value="@load(vm.settings.imprimirMiniVd)" /> </row>
+               <row><button onClick="@command('imprimirMiniVd')" label="Mudar"/> </row>
+           </rows>
+
+
+
+       </grid>
+
+    </window>
+
+</zk>

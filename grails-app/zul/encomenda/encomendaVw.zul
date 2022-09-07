@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+            viewModel="@id('vm') @init('encoemndaVwViewModel')">
+
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #FFF}
+            <!--  .z-columns{ background: #ccccff}
+              .z-column{ background: #ccccff}
+              .z-listheader{ background: #ccccff}
+              .z-listhead{ background: #ccccff}-->
+        </style>
+
+        Filtragem:
+        <textbox value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>
+        <hbox>
+            <div width="60%">
+                <listbox id="lb_filter" onClick="@command('sendMessage')" model="@load(vm.items)" width="100%"
+                         height="200px">
+                    <listhead>
+                        <listheader label="Name" align="left"/>
+
+                    </listhead>
+                    <template name="model" var="item">
+                        <listitem>
+                            <listcell label="@load(item.name)"/>
+
+                        </listitem>
+                    </template>
+
+                </listbox>
+            </div>
+            <div width="">
+
+
+            </div>
+        </hbox>
+
+    </window>
+
+</zk>

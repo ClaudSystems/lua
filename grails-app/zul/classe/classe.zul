@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('classeViewModel')">
+
+        <grid width="320px"   visible="@load(vm.viewClasse)" >
+            <columns>
+                <column  width="30%"/>
+                <column/>
+            </columns>
+            <rows>
+                <row visible="@load(not empty vm.classe.nomeDaClasse)">Designação da Classe: <textbox  readonly="false" constraint="no empty" value="@bind(vm.classe.nomeDaClasse)"  onChange='@command("")' /></row>
+                <row visible="@load(not empty vm.classe.percentualDeDesconto)">Percentual de desconto: <decimalbox  readonly="false" constraint="no negative"  value="@bind(vm.classe.percentualDeDesconto)"  onChange='@command("")' /></row>
+
+                <row>
+
+                    <div>
+
+                        <button image="${z.resource(dir:'images', file:'save.png')}" label="Salvar"  style="color:white;background:blue"   onClick="@command('salvarCliente')"  />
+                    </div>
+                </row>
+
+            </rows>
+
+        </grid>
+
+    </window>
+
+</zk>
