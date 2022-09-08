@@ -159,5 +159,9 @@ class IndexViewModel {
         Executions.sendRedirect("/categoria/categoriaCrud")
     }
 
+    @Command
+    def showFornecedores (){
+        Executions.sendRedirect("/fornecedor/fornecedorCrud")
+    }
 
 }

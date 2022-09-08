@@ -376,6 +376,12 @@ class ProdutoCrudViewModel {
                 info.style= red
                 return
             }
+            while (ItemProduto.findByProduto(selectedItem)){
+                //  Messagebox.show("Selecione O Produto que desja eliminar!", "Lua", 1, Messagebox.ERROR)
+                info.value = "Elimine antes todos os items associados a este produto!"
+                info.style= red
+                return
+            }
            /* Messagebox.show("Tem certeza que deseja eliminar este Produto?", "Execute?", Messagebox.YES | Messagebox.NO,
                     Messagebox.QUESTION, new EventListener<Event>() {
                 @Override
@@ -388,7 +394,7 @@ class ProdutoCrudViewModel {
                 }
             }
             )*/
-            selectedItem.delete()
+            selectedItem.delete(flush: true)
             items.remove(selectedItem)
            // selectedItem = null
             info.value = "O produto foi eliminado !"

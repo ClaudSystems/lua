@@ -2,6 +2,7 @@ package lua.vendas
 
 import base.ComposersService
 import lua.BasicController
+import lua.SessionStorageService
 
 /**
  * CotacaoController
@@ -10,7 +11,7 @@ import lua.BasicController
 class CotacaoController extends BasicController {
 
 	ComposersService composersService
-
+	SessionStorageService sessionStorageService
 	def cotacao(){}
 	def cotacaoCrud (){ }
 	def editCotacao (){
@@ -20,8 +21,10 @@ class CotacaoController extends BasicController {
 	def ListCotacao (){ }
 	def listItems (){ }
 	def showCotacao(){}
-	def newCotacao(){
-
+	def newCotacao(){}
+	def printerCotacao(){
+		def numero = sessionStorageService.getCotacao().numeroDaCotacao as String
+		[numero:numero]
 	}
 /*	def Imprimir(){
 		String reportName = '/cotacao'

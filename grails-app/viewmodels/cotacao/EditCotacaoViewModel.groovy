@@ -2,6 +2,7 @@ package cotacao
 
 import base.ComposersService
 import base.EncryptionService
+import lua.SessionStorageService
 import lua.UtilizadorService
 import lua.entidades.cliente.Cliente
 import lua.estoque.estoque.Armazem
@@ -27,6 +28,7 @@ import org.zkoss.zul.Messagebox
 class EditCotacaoViewModel {
     EncryptionService encryptionService
     UtilizadorService utilizadorService
+    SessionStorageService sessionStorageService
     boolean viewCliente = false
     boolean viewBtActualizar = false
     private String filter
@@ -179,7 +181,7 @@ class EditCotacaoViewModel {
     @Command
     @NotifyChange(["info"])
     def showHelp(){
-        info.value = "Double click to delte Item!"
+        info.value = "Double click to delete Item!"
     }
     @Command
     def createFatura(){
@@ -209,7 +211,7 @@ class EditCotacaoViewModel {
                         def faturaDb = Fatura.find(fatura)
                         if(!faturaDb.equals(null)){
                             Messagebox.show("Os dados da Cotação No. "+cotacao.id+" Geraram uma nova fatura! No."+faturaDb.id, "Lua", 1,  Messagebox.INFORMATION)
-                            composersService.faturaId=faturaId
+                            composersService.faturaId=faturaDb
                         }else{
                             Messagebox.show("Erro na geração da nova fatura", "Lua", 1,  Messagebox.ERROR)
                         }
@@ -287,7 +289,7 @@ class EditCotacaoViewModel {
                 ip.save()
             }
             cotacao.valorDoIva=getTotalIva()
-            cotacao.save flush: true
+            cotacao.merge(failOnError: true,flush: true)
 
         } catch (Exception e ){
           //  Messagebox.show("Erro na gravação da Cotação No. "+cotacao.id+":"+ e.toString(), "Lua", 1,  Messagebox.ERROR)
@@ -346,6 +348,7 @@ class EditCotacaoViewModel {
       init() {
         cotacao=Cotacao.findById(composersService.cotacao.id)
         cliente = Cliente.findById(composersService.clienteId)
+        sessionStorageService.setCotacao(cotacao)
     }
 
     Cliente getCliente() {
@@ -361,6 +364,7 @@ class EditCotacaoViewModel {
 
     void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao
+        sessionStorageService.cotacao = cotacao
     }
 
 
@@ -369,7 +373,6 @@ class EditCotacaoViewModel {
         if (clientes == null) {
             clientes = new ArrayList<Cliente>(Cliente.all)
         }
-
         return clientes
     }
 
@@ -438,7 +441,7 @@ class EditCotacaoViewModel {
         System.println(cotacao.id)
         composersService.cotacaoId=cotacao.id
       //  Executions.sendRedirect("/cotacao/showCotacao")
-        Executions.sendRedirect("/cotacao/imprimir")
+        Executions.sendRedirect("/cotacao/printerCotacao/")
     }
 
     @Command

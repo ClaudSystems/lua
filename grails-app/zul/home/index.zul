@@ -23,6 +23,7 @@
                         <menuitem  image="${z.resource(dir:'images', file:'embalagem.png')}" label="Unidades" onClick="@command('showUnidades')" />
                         <menuitem  image="${z.resource(dir:'images', file:'cliente.png')}" label="Clientes" onClick="@command('showClientes')" />
                         <menuitem  image="${z.resource(dir:'images', file:'classe.png')}" label="Classes de Clientes" onClick="@command('showClasses')" />
+                        <menuitem  image="${z.resource(dir:'images', file:'fornecedor.png')}" label="Fornecedores" onClick="@command('showFornecedores')" />
                     </menupopup>
                 </menu>
                 <menu width="200px" image="${z.resource(dir:'images', file:'vendas.png')}"  label="Vendas">
@@ -102,7 +103,7 @@
 
             </menubar>
 
-            <listbox    style="@bind('style')"     model="@load(vm.produtos)" width="300px"
+           <!-- <listbox    style="@bind('style')"     model="@load(vm.produtos)" width="300px"
                         height="" mold="paging" pageSize="10" >
                 <listhead >
                     <listheader width=""   label="Produto" />
@@ -129,7 +130,7 @@
 
                     </listfooter>
                 </listfoot>
-            </listbox>
+            </listbox>-->
         </hbox>
 
 

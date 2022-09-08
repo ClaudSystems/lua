@@ -19,7 +19,7 @@
               .z-listheader{ background: #ccccff}
               .z-listhead{ background: #ccccff}-->
         </style>
-
+        <include src="/home/index.zul"/>
         <label id="info"/>
         <button  visible="@bind(!not empty vm.selectedItem)"  image="${z.resource(dir:'images', file:'add.png')}"  style="color:white;background:green"  onClick="@command('addItem')"   label="Add" />
         <grid width="50%" style="margin-top:20px" visible="@bind(not empty vm.selectedItem)" >
@@ -65,7 +65,7 @@
 
         </grid>
 
-        <button style="color:white;background:#800000"  visible="@bind(not empty vm.pickedItemSet)" image="${z.resource(dir:'images', file:'remover.png')}" label="Excluir Items Selecionados" onClick="@command('deliteSelectedItems')" />
+        <button style="color:white;background:#800000"  visible="@bind(not empty vm.pickedItemSet)" image="${z.resource(dir:'images', file:'remover.png')}" label="Excluir Items Selecionados" onDoubleClick="@command('deliteSelectedItems')" />
 
         Filtragem:
         <textbox width="44%"  style="background:#95B9C7;color:black" value="@bind(vm.filter)" onChange="@command('doSearch')" instant="true"/>

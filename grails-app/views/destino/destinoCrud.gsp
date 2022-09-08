@@ -14,14 +14,17 @@
 </head>
 
 <body>
-<div  style="background: #ffbcaf;font-size:16px "  class="panel-heading">Destinos
 
-</div>
+
 <sec:ifNotGranted roles="cotacao">
     <g:render template="/layouts/acessoNegado"/>
 </sec:ifNotGranted>
 <sec:access expression="hasRole('cotacao')">
     <z:body/>
+    <div  style="background: #ffbcaf;font-size:16px "  class="panel-heading">Destinos
+
+    </div>
+
 </sec:access>
 
 </body>

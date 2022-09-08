@@ -4,6 +4,7 @@ import base.ComposersService
 import base.EncryptionService
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.transaction.Transactional
+import lua.SessionStorageService
 import lua.contador.ContadorService
 import lua.entidades.cliente.Cliente
 import lua.estoque.entradaDeProduto.EntradaDeProduto
@@ -32,7 +33,7 @@ import org.zkoss.zul.Messagebox
 @Transactional
 class NewCotacaoViewModel {
     ComposersService composersService
-    EncryptionService encryptionService
+    SessionStorageService sessionStorageService
     SpringSecurityService springSecurityService
     ContadorService contadorService
     boolean viewCliente = false
@@ -167,7 +168,7 @@ class NewCotacaoViewModel {
     def createCotacao(){
 
         try {
-            System.println("listagem dos items da cotacao")
+
             if(cliente.equals(null)){
                // Messagebox.show("Preencha os campos! ", "Lua", 1,  Messagebox.ERROR)
                 info.value ="Preencha os campos! "
@@ -220,10 +221,9 @@ class NewCotacaoViewModel {
             }
 
             cotacao.numeroDaCotacao=contadorService.gerarNumeroDaCotacao()
-            System.println("cotaçºao No."+cotacao.numeroDaCotacao)
             cotacao.cliente.save()
-           cotacao.save flush: true
-
+           cotacao.save (flush: true,failOnError: true)
+            sessionStorageService.setCotacao(cotacao)
 
         } catch (Exception e ){
                //     Messagebox.show("Erro na gravação "+e.message, "Lua", 1,  Messagebox.ERROR)
@@ -411,8 +411,8 @@ class NewCotacaoViewModel {
         def cotacaoDb = Cotacao.findById(cotacao?.id)
         if(cotacaoDb){
             composersService.cotacaoId=cotacaoDb.id
-            Executions.sendRedirect("/cotacao/imprimir_cotacao")
             bt_salvar=false
+            Executions.sendRedirect("/cotacao/printerCotacao/")
         }else
 
         {
@@ -522,10 +522,9 @@ class NewCotacaoViewModel {
     @Command
     @NotifyChange(['cotacao'])
     def  updateCotacao(){
-        def valor_do_iva = 0
         for(ItemProduto ip in items){
             if(ip.ivaAplicado){
-                ip.valorDoIva = ip.precoDeVenda*ip.produto.iva.percentualIva/100
+                ip.valorDoIva = ip.precoDeVenda*ip.produto?.iva?.percentualIva/100
             }
         }
         cotacao.itemsProduto = items

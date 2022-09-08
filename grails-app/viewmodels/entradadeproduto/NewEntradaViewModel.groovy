@@ -46,7 +46,7 @@ class NewEntradaViewModel {
     ItemProduto selectedItemProduto
     ComposersService composersService
     EntradaDeProduto entrada = new EntradaDeProduto()
-    Fornecedor fornecedor
+    Fornecedor fornecedor = new Fornecedor()
 
     String getCodigo() {
         return codigo
@@ -66,12 +66,8 @@ class NewEntradaViewModel {
 
     @Command
     @NotifyChange(["show_fornecedor"])
-    def mostraForncedor(){
-        if (show_fornecedor){
-            show_fornecedor= false
-
-        }
-        else show_fornecedor = true
+    def mostraForncedor() {
+        show_fornecedor = !show_fornecedor
     }
 
     void setFornecedor(Fornecedor fornecedor) {

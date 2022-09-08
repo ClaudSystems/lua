@@ -7,7 +7,7 @@ package lua.estoque.iva
 class Iva implements Serializable{
     private static final long serialVersionUID = 1
     String descricao
-   BigDecimal percentualIva
+   BigDecimal percentualIva = 0.0
     boolean valido
 
 	/* Default (injected) attributes of GORM */

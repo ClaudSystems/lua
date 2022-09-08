@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <window apply="grailsBindComposer"
+        viewModel="@id('vm') @init('printerCotacaoViewModel')">
+        <style>
+            body { background-color: #eaeaea; }
+            .z-textbox{ border-style : none; background: #FFF}
+            .z-intbox{ border-style : none; background: #FFF}
+            .z-doublebox{ border-style : none; background: #FFF}
+            .z-listcell{ border-style : none; background: #EBEBEB}
+            .z-listhead{ border-style : nome; background: #EBEBEB}
+            .z-listheader{ border-style : none; "background:#EBEBEB"}
+            .z-listbox{ border-style : none; background: #FFF}
+            .z-listhead{ border-style : none; background: #FFF}
+            .z-listbox-header{ border-style : 2px; background: #FFF;color:black}
+            .z-listhead-bar{ border-style : none; background: #FFF}
+            .z-listheader-sort{ border-style : none; background: #EBEBEB;color:black}
+            .z-listheader-content{ border-style : 2px; background: #FFF;color:black}
+            .z-label{ border-style : none; background: #FFF;color:black}
+
+        </style>
+        <hbox align="center">
+            <image src="${z.resource(dir:'images', file:'logo_me.png')}"/>
+        </hbox>
+        <grid width="730px">
+            <columns>
+                <column width="120px"/>
+                <column width="200px" />
+                <column width="200px"/>
+                <column width="118px"/>
+                <column width="90px"/>
+                <column/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="Cliente:"/>
+                    <label value="@load(vm.cotacao.cliente.nome)"/>
+                    <label/>
+                    <label value="Cotação No.:"/>
+                    <label value="@load(vm.cotacao.numeroDaCotacao)"/>
+                </row>
+                <row>
+                    <label value="Nuit:"/>
+                    <label value="@load(vm.cotacao.cliente.nuit)"/>
+                    <label/>
+                    <label value="Moeda"/>
+                    <label value="MZN"/>
+
+
+                </row>
+                <row>
+                    <label value="Endereço:"/>
+                    <label value="@load(vm.cotacao.cliente.endereco)"/>
+                    <label/>
+
+                    <label value="Data de Emissão"/>
+                    <label value="@load(vm.cotacao.dateCreated)@converter('formatedDate', format='dd/MM/yyyy') "/>
+
+
+                </row>
+                <row>
+                    <label value="Tef:"/>
+                    <label value="@load(vm.cotacao.cliente.numTelefone)"/>
+                    <label/>
+                    <label value="Banco"/>
+                    <label value=""/>
+                </row>
+                <row>
+                    <label value="Mail:"/>
+                    <label value="@load(vm.cotacao.cliente.nuit)"/>
+
+                </row>
+                <row>
+                    <label value="Codigo:"/>
+                    <label onClick="@command('change')" value="@load(vm.cotacao.cliente.nuit)"/>
+
+                </row>
+                <row onClick="@command('change')"  value="@bind(vm.original)"/>
+            </rows>
+        </grid>
+        <listbox multiple="true"    style="@bind('style')"     model="@load(vm.cotacao.itemsProduto)" width="730px"
+                 height="" mold="paging" pageSize="20" >
+            <listhead >
+                <listheader width="40px" sort="auto" label="Item" />
+                <listheader width="90px" sort="auto" label="Codigo" />
+                <listheader width="330px"  label="Descrição" />
+                <listheader  width="60px" label="Qtd" />
+                <listheader width="90px"  label="Valor Unitário" />
+                <listheader width="110px"  label="Sub Total" />
+
+
+            </listhead>
+            <template name="model" var="item" status="s">
+
+                <listitem  style="@bind('style'))">
+                    <listcell label="@bind(s.index)" />
+                    <listcell style="border:none"   ><label    style="border:none" width="100%"  value="@bind(item.produto.codigo)" /></listcell>
+                    <listcell style="border:none"   ><label style="border:none" width="100%" value="@bind(item.descricao)" /></listcell>
+                    <listcell style="border:none"   ><label    style="border:none" width="100%"  value="@bind(item.qtd)" /></listcell>
+                    <listcell style="border:none"  ><label   style="border:none" width="100%" value="@bind(item.precoDeVenda)  " /></listcell>
+                    <listcell style="border:none"  label="@bind(item.qtd*item.precoDeVenda) @converter('formatedNumber', format='###,##0.00')"    />
+                </listitem>
+            </template>
+
+        </listbox>
+        <grid  width="730px">
+            <columns>
+                <column width="40px"/>
+                <column width="90px" />
+                <column width="325px"/>
+                <column width="60px"/>
+                <column width="90px"/>
+                <column width="120px"/>
+                <column/>
+            </columns>
+            <rows style="background:#EBEBEB" >
+                <row style="background:#EBEBEB">
+                    <label />
+                    <label />
+                    <label/>
+                    <label />
+                    <label   value="Sub-Total"/>
+                    <label value="@load(vm.cotacao.valor)@converter('formatedNumber', format='###,##0.00')"/>
+                </row>
+                <row style="background:#EBEBEB">
+                    <label />
+                    <label />
+                    <label/>
+                    <label />
+                    <label   value="IVA"/>
+                    <label value="@load(vm.cotacao.valorDoIva)@converter('formatedNumber', format='###,##0.00')"/>
+                </row>
+                <row style="background:#EBEBEB">
+                    <label />
+                    <label />
+                    <label/>
+                    <label />
+                    <label  style="font-weight:bold;font-size:12pt"  value="Total"/>
+                    <label style="font-weight:bold;font-size:12pt"  value="@load(vm.cotacao.valorTotal)@converter('formatedNumber', format='###,##0.00')"/>
+                </row>
+            </rows>
+        </grid>
+
+    </window>
+
+</zk>
