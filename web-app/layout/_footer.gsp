@@ -37,7 +37,7 @@
                             <p class="tel">
                                 <i class="fa fa-phone"></i> Tel : + (258) - 84 3854654<br />
                                 <i class="fa fa-envelope"></i> Mail : <a href="#">claudsystems@gmail.com</a><br />
-                                <i class="fa -facebook-square"></i> Adress : Rua Da Resistencia, 1150, r/c<br />
+                                <i class="fa -facebook-square"></i> Adress : Rua Do Entreposto, r/c<br />
                                 <i class="fa -facebook-square"></i> Maputo - Mozambique<br />
 
                             </p>
@@ -50,7 +50,7 @@
     <!-- row -->
     <footer id="footer">
         <p>
-        &copy; 2016 - 2018 <a href="#">CLAUD</a>, inc. All rights
+        &copy; 2016 - 2022 <a href="#">CLAUD</a>, inc. All rights
         reserved.
         </p>
     </footer>

@@ -19,9 +19,11 @@ class Fatura implements Serializable{
 	BigDecimal valorTotalPago = 0.0
 	BigDecimal valorEmDivida = 0.0
 	BigDecimal valorDoIva = 0.0
+	BigDecimal saldo = 0.0
 	Utilizador utilizador
 	Cliente cliente
 	boolean pago = false
+    Boolean saldoUsado = false
 	boolean  cancelado= false
     boolean entregue = false
 	String estado
@@ -53,6 +55,7 @@ class Fatura implements Serializable{
 		valorTotalPago nullable: true
         valorEmDivida nullable: true
         valorTotal nullable: true
+        saldoUsado nullable: true
     }
 	
 	/*
@@ -69,18 +72,25 @@ class Fatura implements Serializable{
     }
 
     BigDecimal getValorTotalPago() {
-        def valorPago=0.0
+       valorTotalPago =0.0
         if(recibos){
             for(int x=0; x<recibos.size();x++ ){
-                valorPago+=recibos[x].valor
+                valorTotalPago+=recibos[x].valor
             }
         }
-        return valorPago
+        return valorTotalPago
     }
 
     BigDecimal getValorEmDivida() {
         BigDecimal divida = valorTotal-valorTotalPago
         return       -(divida)
+    }
+
+    BigDecimal getSaldo() {
+        if(saldoUsado){
+            return 0.0
+        }
+        return saldo
     }
 
     BigDecimal getValorTotal() {

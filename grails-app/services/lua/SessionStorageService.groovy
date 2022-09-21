@@ -1,6 +1,7 @@
 package lua
 
 import lua.vendas.cotacao.Cotacao
+import lua.vendas.fatura.Fatura
 import org.springframework.web.context.request.RequestContextHolder
 
 import javax.servlet.http.HttpSession
@@ -19,4 +20,7 @@ class SessionStorageService {
 
     def setCotacao(Cotacao cotacao) { getSession().cotacao = cotacao }
     def getCotacao() { getSession().cotacao }
+
+    def setFatura(Fatura fatura) { getSession().fatura = fatura }
+    def getFatura() { getSession().fatura }
 }

@@ -4,6 +4,7 @@ import base.ComposersService
 import base.EncryptionService
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.transaction.Transactional
+import lua.SessionStorageService
 import lua.UtilizadorService
 import lua.contador.ContadorService
 import lua.entidades.cliente.Cliente
@@ -33,9 +34,7 @@ import org.zkoss.zul.Messagebox
 class NewFaturaViewModel  {
     String blue = "color:blue"
     ContadorService contadorService
-    EncryptionService encryptionService
-    UtilizadorService utilizadorService
-    ComposersService composersService
+    SessionStorageService sessionStorageService
     SpringSecurityService springSecurityService
     boolean viewCliente = false
     private String filter
@@ -49,7 +48,12 @@ class NewFaturaViewModel  {
     boolean labelInfo = false
     boolean bt_save = true
     @Wire Label info
+    private BigDecimal totalIva
+    private  Iva iva
 
+    BigDecimal getTotalIva() {
+        return totalIva
+    }
 
     @Command
     @NotifyChange(["items","codigo"])
@@ -66,6 +70,7 @@ class NewFaturaViewModel  {
             itemProduto.setArmazem(Armazem.findByCodigo("A1"))
            itemProduto.precoDeVenda = p.precoDeVenda
            itemProduto.ivaAplicado = p.ivaAplicado
+            itemProduto.iva = p.iva
             items.add(itemProduto)
         }
 
@@ -359,7 +364,6 @@ class NewFaturaViewModel  {
     @Command
     @NotifyChange(["items","fatura"])
     def addSelectedItem(@BindingParam("index") Long index){
-        System.println("addSelectedItem: "+index)
         ItemProduto itemProduto = new ItemProduto()
         Produto p = Produto.findById(index)
         itemProduto.setProduto(p)
@@ -367,8 +371,8 @@ class NewFaturaViewModel  {
         itemProduto.setDescricao(p.descricao)
         itemProduto.precoDeVenda = p.precoDeVenda
         itemProduto.ivaAplicado = p.ivaAplicado
+        itemProduto.iva = p.iva
         itemProduto.qtd = 1
-        System.println("addItem ivaActivo= "+itemProduto.ivaAplicado)
         itemProduto.setArmazem(Armazem.findByCodigo("A1"))
         items.add(itemProduto)
         updateFatura()
@@ -398,7 +402,7 @@ class NewFaturaViewModel  {
     def    editarFatura(){
         info.value=""
         System.println("o botão editarFatura foi clicado")
-        composersService.faturaId=fatura.id
+        sessionStorageService.fatura = fatura
         if(fatura.id!=null){
             Executions.sendRedirect("/fatura/edit")
         }else {
@@ -419,6 +423,7 @@ class NewFaturaViewModel  {
         fatura.cliente= cliente
         fatura.valorDoIva = 0.0
         fatura.valor = 0.0
+        iva = Iva.findByValido(true)
       }
 
     Cliente getCliente() {
@@ -426,6 +431,8 @@ class NewFaturaViewModel  {
     }
 
     Fatura getFatura() {
+        fatura.getValorTotal()
+        fatura.getValor()
         return fatura
     }
 
@@ -454,7 +461,7 @@ class NewFaturaViewModel  {
     }
 
     @Command
-    @NotifyChange(["items","fatura"])
+    @NotifyChange(["fatura"])
     def addItem(){
         ItemProduto itemProduto = new ItemProduto()
         Produto produto = new Produto()
@@ -465,55 +472,35 @@ class NewFaturaViewModel  {
         itemProduto.setArmazem(Armazem.findByCodigo("A1"))
         itemProduto.precoDeVenda = produto.precoDeVenda
         items.add(itemProduto)
-        updateFatura()
+        fatura.addToItemsProduto(itemProduto)
+
     }
 
     @Command
     @NotifyChange(["items","fatura"])
     void removeItem(@BindingParam("index") Integer index) {
-        System.println(index)
         items.remove(index)
-        updateFatura()
+       updateFatura()
     }
 
     @Command
-    @NotifyChange(["fatura"])
+    @NotifyChange(["fatura","valorDoIva","valor","items","totalIva"])
     def  updateFatura(){
-        fatura.setValor(0.0)
-        fatura.setValorDoIva(0.0)
-        def totalIva = 0.0
-        def subTotal = 0.0
-        Iva iva = Iva.findByValido(true) as Iva
-
-
-        if(iva.equals(null)){
-          //  Messagebox.show("Por favor Introduza o iva no sistema!", "Lua", 1,  Messagebox.ERROR)
-            info.style="color:red"
-            info.value ="Por favor Introduza o iva no sistema!"
+        totalIva = 0.0
+        if(fatura.itemsProduto==null){
+            fatura.itemsProduto = new LinkedHashSet<>()
         }
-        System.println("iva = "+iva.percentualIva)
-        for (ItemProduto ip in items){
+        fatura.itemsProduto.clear()
+        for(ItemProduto ip in items){
             if(ip.ivaAplicado){
-                ip.subTotal = ip.precoDeVenda*ip.qtd
-                totalIva+=ip.subTotal*iva.percentualIva/100
-                System.println("ip.subTotal="+ip.subTotal)
-                ip.valorDoIva = ip.subTotal*iva.percentualIva/100
-                System.println("updateFatura ip.valorDoIva = "+ip.valorDoIva)
+                ip.valorDoIva = ip.precoDeVenda*iva.percentualIva/100
             }else {
-                ip.valorDoIva=0.0
-                ip.subTotal = ip.precoDeVenda*ip.qtd
+                ip.valorDoIva = 0.0
             }
-
-            subTotal+=ip.subTotal
+            fatura.itemsProduto.add(ip)
 
         }
-        System.println("upDateFatura subtotal "+subTotal)
-        System.println("updatecotacao total iva= "+totalIva)
-        fatura.setValor(subTotal)
-        fatura.setValorDoIva(totalIva)
-        System.println("upDateFatura valorDoIva "+fatura.valorDoIva)
-        System.println("updateFatura fatura.valor= "+fatura.valor)
-
+        System.println(totalIva)
     }
 
 
@@ -531,15 +518,15 @@ class NewFaturaViewModel  {
     @NotifyChange(["fatura"])
     def alterarIva(@BindingParam("index") Integer index){
         items[index].ivaAplicado=!items[index].ivaAplicado
+        System.println(items[index].ivaAplicado)
         updateFatura()
     }
 
     @Command
     def  imprimir(){
-
-         if(Fatura.findById(fatura.id)){
-             composersService.fatura = fatura
-             Executions.sendRedirect("/fatura/imprimir")
+         if(fatura.id!=null){
+             sessionStorageService.fatura = fatura
+             Executions.sendRedirect("/fatura/printerFatura")
             /*fatura=new Fatura()
              cliente = null*/
          }else

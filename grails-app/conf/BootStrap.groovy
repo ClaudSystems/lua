@@ -67,10 +67,10 @@ class BootStrap {
         /*unica instancia de settings*/
         if(!Settings.findByDesigracao('settings')){new Settings(desigracao: "settings",aceitarSaidasSemEstoque: false,refletirSaidasEmEstoqueDeVds: false).save(flush: true)}
 
-        if(!FormaDePagamento.findByNome('Boleto Bancario')){
+        /*if(!FormaDePagamento.findByNome('Boleto Bancario')){
             def boletoBancario = new FormaDePagamento(nome: 'Boleto Bancario')
             boletoBancario.save (flush: true)
-        }
+        }*/
         if(!FormaDePagamento.findByNome('Cartao De Credito')){
             def cartaoDeCredito = new FormaDePagamento(nome: 'Cartao De Credito')
             cartaoDeCredito.save (flush: true)
@@ -87,6 +87,22 @@ class BootStrap {
 
         if(!FormaDePagamento.findByNome('Dinheiro')){
             def dinheiro = new FormaDePagamento(nome: 'Dinheiro')
+            dinheiro.save (flush: true)
+        }
+        if(!FormaDePagamento.findByNome('Emola')){
+            def dinheiro = new FormaDePagamento(nome: 'Emola')
+            dinheiro.save (flush: true)
+        }
+        if(!FormaDePagamento.findByNome('M-Pesa')){
+            def dinheiro = new FormaDePagamento(nome: 'M-Pesa')
+            dinheiro.save (flush: true)
+        }
+        if(!FormaDePagamento.findByNome('Carteira Movel')){
+            def dinheiro = new FormaDePagamento(nome: 'Carteira Movel')
+            dinheiro.save (flush: true)
+        }
+        if(!FormaDePagamento.findByNome('Mkesh')){
+            def dinheiro = new FormaDePagamento(nome: 'Mkesh')
             dinheiro.save (flush: true)
         }
 

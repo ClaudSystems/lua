@@ -2,6 +2,7 @@ package fatura
 
 import base.ComposersService
 import grails.transaction.Transactional
+import lua.SessionStorageService
 import lua.contador.ContadorService
 import lua.contas.Conta
 import lua.entidades.cliente.Cliente
@@ -25,6 +26,7 @@ import org.zkoss.zul.Messagebox
 
 @Transactional
 class EditFaturaViewModel {
+    SessionStorageService sessionStorageService
     boolean viewCliente = false
     boolean bt_salvar_recibo = true
     boolean  viewCheque = false
@@ -49,7 +51,8 @@ class EditFaturaViewModel {
     Cheque cheque
     @Wire Label info
     ContadorService contadorService
-    String inf="Para imprimir o duplicado, pressione a botão direito do mouse sobre o botão 'imprimir'"
+    String inf=""
+
 
     boolean getBt_salvar_recibo() {
         return bt_salvar_recibo
@@ -76,7 +79,6 @@ class EditFaturaViewModel {
     }
 
     ListModelList<FormaDePagamento> getFormasDePagamento() {
-
         if (formasDePagamento == null) {
             formasDePagamento = new ListModelList<FormaDePagamento>(FormaDePagamento.all)
         }
@@ -194,9 +196,9 @@ class EditFaturaViewModel {
             }
             )*/
             fatura.cancelado = true
-            fatura.save flush: true
+            fatura.merge()
             info.value = "Esta fatura foi cancelado!"
-            info.style = "color:red"
+            info.style = "color:blue"
           //  items.removeAll()
           //  Executions.sendRedirect("/fatura/listFatura")
 
@@ -220,17 +222,10 @@ class EditFaturaViewModel {
     @NotifyChange
     def updateFatura(){
         try {
-            Fatura faturaDB =Fatura.findById(fatura.id)
-            Cliente c = Cliente.findById(cliente.id)
-            c.codigo = cliente.codigo
-            c.nome = cliente.nome
-            c.nuit = cliente.nuit
-            c.endereco = cliente.endereco
-            c.numTelefone= cliente.numTelefone
-            c.save()
-            faturaDB.cliente=c
-            faturaDB.itemsProduto = fatura.itemsProduto
-            for(ItemProduto ip in faturaDB.itemsProduto){
+           cliente.merge()
+            fatura.cliente=cliente
+            fatura.itemsProduto = fatura.itemsProduto
+            for(ItemProduto ip in fatura.itemsProduto){
                 if(ip.produto.codigo.empty){
                    // Messagebox.show("Elimine os items sem codigo valido!", "Lua", 1,  Messagebox.ERROR)
                     info.value = "Elimine os items sem codigo valido!"
@@ -251,8 +246,8 @@ class EditFaturaViewModel {
                 ip.save()
             }
 
-            faturaDB.valorDoIva=getTotalIva()
-            faturaDB.save flush: true
+            fatura.valorDoIva=getTotalIva()
+            fatura.merge(failOnError: true)
 
         } catch (Exception e ){
           //  Messagebox.show("Erro na gravação da Fatura No. "+fatura.numeroDaFatura+":"+ e.toString(), "Lua", 1,  Messagebox.ERROR)
@@ -276,7 +271,6 @@ class EditFaturaViewModel {
         itemProduto.setDescricao(p.descricao)
         itemProduto.operacao = "fatura"
         itemProduto.setArmazem(Armazem.findByCodigo("A1"))
-
         items.add(itemProduto)
         fatura.addToItemsProduto(itemProduto)
     }
@@ -313,11 +307,11 @@ class EditFaturaViewModel {
     @NotifyChange(["inf"])
     init() {
 
-
-        task.scheduledExecutionTime()
-        fatura = Fatura.findById(composersService.faturaId)
+       task.scheduledExecutionTime()
+       def  fa = sessionStorageService.getFatura() as Fatura
+        fatura = Fatura.findById(fa.id)
         cliente= fatura.cliente
-           }
+    }
 
     Cliente getCliente() {
         return cliente    }
@@ -350,7 +344,7 @@ class EditFaturaViewModel {
 
         if (items == null) {
             if (!(fatura==null))
-                items=fatura.itemsProduto
+                items=fatura.itemsProduto.sort{it.id}
 
         }
 
@@ -407,20 +401,22 @@ class EditFaturaViewModel {
             info.value = "Esta Fatura foi cancelada!"
             return
         }
-        composersService.fatura=fatura
-        Executions.sendRedirect("/fatura/imprimir")
+       // composersService.fatura=fatura
+        sessionStorageService.fatura = fatura
+        Executions.sendRedirect("/fatura/printerFatura")
         info.value="Para imprimir o duplicado pressione o botão direito"
     }
-    @Command
+    /*@Command
     def  imprimirDuplicado(){
         if(fatura.cancelado){
             info.value = "Esta Fatura foi cancelada!"
             return
         }
-        composersService.faturaId=fatura.id
-        composersService.faturaNumber=fatura.numeroDaFatura
-        Executions.sendRedirect("/fatura/imprimirDuplicado")
-    }
+       *//* composersService.faturaId=fatura.id
+        composersService.faturaNumber=fatura.numeroDaFatura*//*
+        sessionStorageService.fatura = fatura
+        Executions.sendRedirect("/fatura/printerFatura")
+    }*/
 
     @Command
     @NotifyChange(["iva","valor","fatura","viewBtActualizar"])
@@ -525,7 +521,17 @@ class EditFaturaViewModel {
     }
 
     @Command
-    @NotifyChange(['fatura','info',"recibos","bt_salvar_recibo"])
+    @NotifyChange(["recibo","bt_salvar_recibo","fatura"])
+    chechValor(){
+        if(fatura.valorEmDivida<recibo.valor){
+            info.value="O valor Pago é maior que o valor em dívida!"
+            info.style="color:red"
+            fatura.saldo = recibo.valor+fatura.valorEmDivida
+        }
+    }
+
+    @Command
+    @NotifyChange(['fatura','info',"recibos","bt_salvar_recibo","recibo"])
     def createRecibo(){
 
         if(fatura.pago){
@@ -534,12 +540,10 @@ class EditFaturaViewModel {
             return
         }
         info.value=""
-        System.println("createRecibo, viewCheque="+viewCheque)
         recibo.formaDePagamento = selectedFormaDePagamento.toString()
-        System.println("selectedRecibo, recibo.formaDePagamento="+recibo.formaDePagamento)
-        recibo.numeroDoRecibo=contadorService.gerarNumeroDoRecibo()
-        System.println("selectedRecibo, recibo.numeroDoRecibo"+recibo.numeroDoRecibo)
-        cheque.valorDoCheque=recibo.valor
+         recibo.numeroDoRecibo=contadorService.gerarNumeroDoRecibo()
+
+         cheque.valorDoCheque=recibo.valor
         try {
             if(viewCheque){
                 cheque.save(flush: true)
@@ -557,6 +561,11 @@ class EditFaturaViewModel {
                 info.value="Recibo No."+reciboDB.id+" criado com sucesso!"*/
             }
                 /*recibo.fatura=fatura*/
+            if(fatura.valorEmDivida<recibo.valor){
+                info.value="O valor Pago é maior que o valor em dívida!"
+                info.style="color:red"
+                fatura.saldo = recibo.valor+fatura.valorEmDivida
+            }
             recibo.save(flush: true)
                 System.println("createRecibo, recibo.fatura"+fatura.numeroDaFatura)
                 System.println("createRecibo, recibo.valor"+recibo.valor)
@@ -590,17 +599,8 @@ class EditFaturaViewModel {
                         }else {
                             faturaDB.recibos.add(recibo)
                         }
-                        if(faturaDB.valorEmDivida>0){
-                            if(faturaDB.cliente.conta==null){
 
-                                Conta conta = new Conta()
-                                conta.numeroDaConta = contadorService.gerarNumeroDaConta()
-                                conta.tipoDeConta= "ativs"
-                                conta.natureza = "credora"
-
-                            }
-                        }
-                        faturaDB.save(flush: true)
+                        faturaDB.merge()
                        // Messagebox.show("Recibo No."+reciboDB.id+" criado com sucesso!", "Lua", 1,  Messagebox.INFORMATION)
                         info.style="color:blue"
                         info.value="Recibo No."+reciboDB.numeroDoRecibo+" criado com sucesso!"

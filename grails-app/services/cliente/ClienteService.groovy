@@ -23,7 +23,16 @@ class ClienteService {
     }
 
 
+    List<Cliente> findAllByName(String nome) {
+        def c = Cliente.createCriteria()
+        def results = c.list {
+            like("nome", "%" + nome + "%")
 
+            maxResults(4)
+            order("nome", "desc")
+        }
+        return results
+    }
 
 
 }

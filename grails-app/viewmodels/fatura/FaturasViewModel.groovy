@@ -1,13 +1,13 @@
 package fatura
 
-import base.ComposersService
+
+import cliente.ClienteService
 import grails.transaction.Transactional
+import lua.SessionStorageService
+import lua.entidades.cliente.Cliente
 import lua.estoque.itemProduto.ItemProduto
-import lua.vendas.cotacao.Cotacao
 import lua.vendas.fatura.Fatura
 import org.zkoss.bind.annotation.BindingParam
-import org.zkoss.zk.grails.*
-
 import org.zkoss.bind.annotation.Command
 import org.zkoss.bind.annotation.NotifyChange
 import org.zkoss.bind.annotation.Init
@@ -17,19 +17,52 @@ import org.zkoss.zul.ListModelList
 import org.zkoss.zul.Listbox
 import org.zkoss.zul.Messagebox
 
+import javax.validation.constraints.Null
+
 
 @Transactional
 class FaturasViewModel {
-
     @Wire    Listbox lb_items
-    ComposersService composersService
+    Cliente cliente
+    SessionStorageService sessionStorageService
     private String filter = ""
     private String id
-    Item pickedItem
-    private ListModelList<Cotacao> selectedItems
-    private ListModelList<Item> items
+    Fatura fatura
+    private  boolean todas_faturas
+   private ListModelList<Fatura> faturas
+    private ListModelList<Cliente> clientes = new ListModelList<Cliente>()
     Fatura item = new Fatura()
-    List<ItemProduto> itemList = new ArrayList<ItemProduto>()
+    @Command
+    @NotifyChange(["faturas","todas_faturas","info"])
+    void setAllfaturas() {
+        todas_faturas = !todas_faturas
+        getFaturas()
+    }
+    boolean getTodas_faturas() {
+        return todas_faturas
+    }
+
+    void setTodas_faturas(boolean todas_faturas) {
+        this.todas_faturas = todas_faturas
+    }
+
+    ListModelList<Cliente> getClientes() {
+        return clientes
+    }
+
+    Cliente getCliente() {
+        return cliente
+    }
+
+    @NotifyChange(["faturas"])
+    void setCliente(Cliente cliente) {
+        this.cliente = cliente
+    }
+
+    void setFatura(Fatura fatura) {
+        this.fatura = fatura
+        sessionStorageService.setFatura(fatura)
+    }
 
     String getId() {
         return id
@@ -39,13 +72,6 @@ class FaturasViewModel {
         this.id = id
     }
 
-    Item getPickedItem() {
-        return pickedItem
-    }
-
-    void setPickedItem(Item pickedItem) {
-        this.pickedItem = pickedItem
-    }
 
     ListModelList<ItemProduto> getItemList() {
         List<ItemProduto> itemLists = new ArrayList<ItemProduto>()
@@ -69,121 +95,72 @@ class FaturasViewModel {
         return filter
     }
 
-    private List<Item> getAllItems() {
-        List<Item> items = new ArrayList<Item>()
-        def faturas = Fatura.all
 
-        for (Fatura x:faturas){
-            if (!x.equals(null)){
-                items.add(new Item(x.id,x.cliente.nome, x.valor, x.dateCreated,x.numeroDaFatura,x.estado))
-            }
+    @NotifyChange(["faturas"])
+    @Command
+    ListModelList<Fatura> getFaturas() {
 
+        if (faturas == null){
+            faturas = new ListModelList<Fatura>()
         }
-        return items
-    }
-
-    ListModelList<Item> getItems() {
-        if (items == null) {
-            items = new ListModelList<Item>(getAllItems())
+        faturas.clear()
+        if(cliente){
+            if(todas_faturas){
+                faturas = Fatura.findAllByClienteAndCanceladoAndPago(cliente,false,true)
+            }else
+            faturas = Fatura.findAllByClienteAndCanceladoAndPago(cliente,false,false)
         }
-        return items
-    }
-
-    ListModelList<Item> getSelectedItems() {
-
-        return selecteItems
-    }
-
-    class Item {
-        private  Long id
-        private BigDecimal valor
-        private Date dateCreated
-        private String nomeCliente
-        private String numeroDaFatura
-        private String estado
-
-
-        Item(Long id,String nome, BigDecimal valor, Date dateCreated,String numeroDaFatura,String estado) {
-            this.id = id
-            this.nomeCliente = nome
-            this.valor = valor
-            this.dateCreated = dateCreated
-            this.numeroDaFatura = numeroDaFatura
-            this.estado = estado
-        }
-        Long getId() {
-            return id
-        }
-        BigDecimal getValor() {
-            return valor
-        }
-        Date getDateCreated() {
-            return dateCreated
-        }
-        String getNomeCliente() {
-            return nomeCliente
-        }
-
-        String getNumeroDaFatura() {
-            return numeroDaFatura
-        }
+       return faturas
     }
 
 
-    @NotifyChange("items")
+    static List<Cliente> findAllByName(String nome) {
+        def c = Cliente.createCriteria()
+        def results = c.list {
+            like("nome", "%" + nome + "%")
+
+            maxResults(4)
+            order("nome", "desc")
+        }
+        return results
+    }
+
+    @NotifyChange(["faturas"])
     @Command
     void doSearch() {
-
-        items.clear()
-        List<Item> allItems = getAllItems()
-        if (filter == null || "".equals(filter)) {
-            items.addAll(allItems)
-        } else {
-            for (Item item : allItems) {
-                if (item.getNomeCliente().toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-                        item.numeroDaFatura.toString().indexOf(filter) >= 0 ||
-                        item.estado.toString().indexOf(filter) >= 0 ||
-                        item.getValor().toString().indexOf(filter) >= 0 ||
-                        item.getDateCreated().toString().indexOf(filter) >= 0) {
-                    items.add(item)
-                }
-                System.println(item.dateCreated)
-            }
-        }
-    }
+        clientes.clear()
+        List<Cliente> allItems = findAllByName(filter)
+           clientes.addAll(allItems)
+     }
 
     @Command
     void showIt() {
-        System.print(pickedItem.id)
-        composersService.faturaId=pickedItem.id
         Executions.sendRedirect("/fatura/edit")
 
     }
-    @Command
+    /*@Command
     @NotifyChange(["item","itemList"])
     void viewItems(@BindingParam("id") Integer id) {
         item = Fatura.findById(id)
-        System.println("viewItems"+id)
-
-    }
+    }*/
 
     @Command
+    static
     def  createNewItem(){
-        composersService.faturaId=null
+
         Executions.sendRedirect("/fatura/new")
     }
 
     @Command
     @NotifyChange(["pickedItem"])
     def findItem(){
-        def id_ = id as Long
-        def itemDB = Fatura.findById(id_)
-        System.println("findItem id="+id)
-        System.println("findItem itemDB="+itemDB)
+        def id_ = id as String
+        def itemDB = Fatura.findByNumeroDaFatura(id_)
+
         if(itemDB.equals(null)){
             Messagebox.show("Não foi localizado a Fatura com o ID= "+id, "Lua", 1,  Messagebox.ERROR)
         }else {
-            composersService.faturaId=itemDB.id
+            sessionStorageService.fatura=itemDB
             Executions.sendRedirect("/fatura/edit")
         }
 
@@ -192,7 +169,7 @@ class FaturasViewModel {
 
 
     @Init init() {
-        getAllItems()
+
     }
 
 

@@ -11,8 +11,6 @@ import lua.vendas.fatura.VdService
 import lua.vendas.recibo.FormaDePagamento
 import lua.vendas.recibo.Recibo
 import org.zkoss.bind.annotation.BindingParam
-import org.zkoss.zk.grails.*
-
 import org.zkoss.bind.annotation.Command
 import org.zkoss.bind.annotation.NotifyChange
 import org.zkoss.bind.annotation.Init
@@ -38,7 +36,6 @@ class ListagemDeVdsViewModel {
     ComposersService composersService
     private String filter = ""
     private String id
-    private ListModelList<Item> items
     Vd item = new Vd()
     private selectedFormaDePagamento
     private ListModelList<FormaDePagamento> formasDePagamento
@@ -86,13 +83,7 @@ class ListagemDeVdsViewModel {
         this.id = id
     }
 
-    Item getPickedItem() {
-        return pickedItem
-    }
 
-    void setPickedItem(Item pickedItem) {
-        this.pickedItem = pickedItem
-    }
 
     ListModelList<ItemProduto> getItemList() {
         List<ItemProduto> itemLists = new ArrayList<ItemProduto>()

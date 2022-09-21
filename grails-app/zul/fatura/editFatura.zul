@@ -72,7 +72,7 @@
                 <!--<listheader width="50px"   align="left">&lt;!&ndash;<checkbox id="ckall" onClick="@command('')"  />&ndash;&gt;</listheader>-->
 
 
-                <listheader width="5%" sort="auto" label="ID" />
+                <listheader width="5%" sort="auto" label="Item" />
                 <listheader width="15%" sort="auto" label="Codigo" />
                 <listheader width="60%"  label="Descrição" />
                 <listheader  width="10%" label="Qtd" />
@@ -86,7 +86,7 @@
             <template name="model" var="item" status="s">
 
                 <listitem  style="@bind('style'))">
-                    <listcell   label="@bind(s.index)" />
+                    <listcell   label="@bind(s.index+1)" />
                     <listcell style="border:none"   ><textbox  onBlur="@command('showMe')"   style="border:none" width="100%"  value="@bind(item.produto.codigo)" /></listcell>
                     <listcell style="border:none"   ><textbox  style="border:none" width="100%" value="@bind(item.descricao)" /></listcell>
                     <listcell style="border:none"   ><intbox   onChange="@command('calcularSubTotal')"  style="border:none" width="100%" constraint="no negative, no zero" value="@bind(item.qtd)" /></listcell>
@@ -133,11 +133,11 @@
             </listbox>
         </div>
         <div visible="@bind(vm.dvPagamentosVisible)">
-
-            <grid width="50%">
+            <hbox>
+            <grid width="600px">
                 <columns>
-                    <column image="${z.resource(dir:'images', file:'pagamento.png')}"  width="20%" />
-                    <column label="Selecione A Forma De Pagamento" width="50%" />
+                    <column image="${z.resource(dir:'images', file:'pagamento.png')}"  width="20%" label="Novo Recibo" />
+                    <column  width="50%" />
                 </columns>
                 <rows>
                     <row>
@@ -156,8 +156,12 @@
                         <textbox  value="@bind(vm.recibo.descricao)"   width="100%" />
                     </row>
                     <row>
+                        <label value="Nº de Telf."/>
+                        <textbox  value="@bind(vm.recibo.numeroDeTelefone)"   width="100%" />
+                    </row>
+                    <row>
                         <label value="Valor"/>
-                        <decimalbox format="###,##0.00"  value="@bind(vm.recibo.valor)"   width="100%" />
+                        <decimalbox onBlur="@command('chechValor')" format="###,##0.00"  value="@bind(vm.recibo.valor)"   width="100%" />
                     </row>
                     <row>
                         <label value="Data"/>
@@ -188,6 +192,28 @@
                     </row>
                 </rows>
             </grid>
+            <grid width="400px">
+                <columns>
+                    <column   width="195px" label="Dados Da Fatura" />
+                    <column  width="200px" />
+                </columns>
+                <rows>
+                    <row>
+                        <label value="Valor em dívida"/>
+                        <label value="@load(vm.fatura.valorEmDivida)"/>
+                    </row>
+                    <row>
+                        <label value="Total Pago"/>
+                        <label  value="@bind(vm.fatura.valorTotalPago) @converter('formatedNumber', format='###,##0.00')  "  width="100%" />
+                    </row>
+                    <row>
+                        <label value="Saldo"/>
+                        <label  value="@bind(vm.fatura.saldo) @converter('formatedNumber', format='###,##0.00') "   width="100%" />
+                    </row>
+
+                </rows>
+            </grid>
+            </hbox>
             <div width="100%" visible="@bind(vm.dvPagamentosVisible)">
                 <label value="Recibos:" style="font-size:18px;color:blue" />
                 <listbox  style="@bind('style')" selectedItem="@bind(vm.selectedRecibo)"     model="@load(vm.recibos)" width="100%"

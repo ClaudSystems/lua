@@ -69,4 +69,7 @@ class ItemProduto implements Serializable{
 
     }
 
+    BigDecimal getValorDoIva() {
+        return valorDoIva
+    }
 }

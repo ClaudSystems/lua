@@ -15,6 +15,7 @@ class Recibo implements Serializable{
 	String formaDePagamento
 	String descricao
 	Cheque cheque
+	String numeroDeTelefone
 //	Long	version
 	
 	/* Automatic timestamping of GORM */
@@ -37,6 +38,7 @@ class Recibo implements Serializable{
 		descricao nullable: true
 		cheque nullable: true
 		faturas nullable: true
+		numeroDeTelefone nullable: true
     }
 	
 	/*

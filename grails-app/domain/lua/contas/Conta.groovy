@@ -9,7 +9,6 @@ import lua.entidades.fornecedor.Fornecedor
  */
 class Conta {
 
-
     Integer numeroDaConta
     String descricao
     String codigo
